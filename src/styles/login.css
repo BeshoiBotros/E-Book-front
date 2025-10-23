@@ -1,0 +1,110 @@
+
+form{
+    display: flex;
+    width: 100%;
+    flex-direction: column;
+    padding: 20px;
+    box-shadow: 2px 2px 15px #1a3350;
+    border-radius: 15px;
+
+}
+
+.form-parent{
+    min-height: 95vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    /* min-width: 90%; */
+    width: 90%;
+    max-width: 1300px;
+}
+
+button[type=submit]{
+    background-color: #1a3350;
+    color: white;
+}
+
+button[type=submit]:hover{
+    border: solid 1px #1a3350;
+}
+
+.form-check{
+    display: flex;
+    flex-direction: row;
+    justify-content: right;
+    gap: 5px;
+}
+
+.hammer-logo{
+    width: 150px;
+    height: 150px;
+    align-self: center;
+}
+.hammer-logo img{
+    width: 100%;
+    height: 100%;
+}
+
+.login-page-container {
+    background-image: url('../assets/login-bg.jpg');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+}
+
+.login-form-card {
+    background-color: rgba(28, 26, 23, 0.93);
+    color: #F8F5F1;
+    border: 1px solid rgba(184, 138, 68, 0.4);
+    max-width: 500px;
+    width: 100%;
+    box-shadow: 0 0 25px rgba(0, 0, 0, 0.5);
+}
+
+.login-form-card h2 {
+    color: #B88A44;
+    font-weight: bold;
+    letter-spacing: 1px;
+}
+
+.login-form-card .form-label {
+    color: #F8F5F1;
+}
+
+.login-form-card .form-control {
+    background-color: #2E1E0F;
+    color: #F8F5F1;
+    border: 1px solid #B88A44;
+}
+
+.login-form-card .form-control::placeholder {
+    color: #B7AFA5;
+}
+
+.login-form-card .form-control:focus {
+    border-color: #B88A44;
+    box-shadow: 0 0 0 0.25rem rgba(184, 138, 68, 0.35);
+}
+
+.login-form-card .btn-primary {
+    background-color: #B88A44;
+    border-color: #B88A44;
+    color: #1C1A17;
+    font-weight: 600;
+}
+
+.login-form-card .btn-primary:hover {
+    background-color: #9C7338;
+    border-color: #9C7338;
+    color: #fff;
+}
+
+.login-form-card a {
+    color: #B88A44;
+}
+
+.login-form-card a:hover {
+    color: #D6A857;
+}
+

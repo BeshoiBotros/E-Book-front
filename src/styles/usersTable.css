@@ -1,0 +1,232 @@
+/* usersTable.css */
+
+:root {
+    --color-primary: #B88A44;
+    --color-primary-hover: #9C7338;
+    --color-bg-dark: #1C1A17;
+    --color-accent-dark: #2E1E0F;
+    --color-text-light: #F8F5F1;
+    --color-muted: #B7AFA5;
+  }
+  
+  .table-responsive {
+    direction: rtl;
+  }
+  
+  .table-responsive h5 {
+    color: var(--color-text-light);
+    font-weight: 600;
+  }
+  
+  /* Add User Button */
+  .add-user {
+    background-color: var(--color-primary);
+    border: 1px solid var(--color-primary);
+    color: var(--color-bg-dark);
+    font-weight: 600;
+    transition: all 0.3s ease;
+  }
+  
+  .add-user:hover {
+    background-color: var(--color-primary-hover);
+    color: var(--color-text-light);
+    border: 1px solid var(--color-primary-hover);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(184, 138, 68, 0.3);
+  }
+  
+  .add-user:focus,
+  .add-user:active,
+  .add-user.active {
+    background-color: var(--color-primary-hover) !important;
+    color: var(--color-text-light) !important;
+    border-color: var(--color-primary-hover) !important;
+    box-shadow: 0 0 0 0.2rem rgba(184, 138, 68, 0.25) !important;
+  }
+  
+  /* Search Field */
+  .searchField {
+    display: flex;
+    flex-direction: row;
+    margin-bottom: 20px;
+  }
+  
+  .searchField .form {
+    width: 100%;
+  }
+  
+  .searchField .form div {
+    display: flex;
+    flex-direction: row;
+  }
+  
+  .searchField .form input[type='text'] {
+    background-color: var(--color-accent-dark);
+    border: 1px solid rgba(184, 138, 68, 0.3);
+    color: var(--color-text-light);
+    border-radius: 8px !important;
+    padding: 0.6rem 1rem;
+    transition: all 0.3s ease;
+  }
+  
+  .searchField .form input[type='text']::placeholder {
+    color: var(--color-muted);
+  }
+  
+  .searchField .form input[type='text']:focus {
+    background-color: var(--color-bg-dark);
+    border-color: var(--color-primary);
+    color: var(--color-text-light);
+    box-shadow: 0 0 0 0.2rem rgba(184, 138, 68, 0.15) !important;
+    outline: none;
+  }
+  
+  /* Table Styles */
+  .table {
+    background-color: var(--color-accent-dark);
+    color: var(--color-text-light);
+    border-radius: 8px;
+    overflow: hidden;
+  }
+  
+  .table thead {
+    background-color: var(--color-bg-dark);
+  }
+  
+  .custom-table-header th {
+    background-color: var(--color-bg-dark) !important;
+    color: var(--color-primary) !important;
+    border: none;
+    padding: 1rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    font-size: 0.875rem;
+    letter-spacing: 0.5px;
+  }
+  
+  .table tbody tr {
+    background-color: var(--color-accent-dark);
+    border-bottom: 1px solid rgba(184, 138, 68, 0.1);
+    transition: all 0.3s ease;
+  }
+  
+  .table tbody tr:hover {
+    background-color: rgba(184, 138, 68, 0.1);
+    transform: scale(1.01);
+  }
+  
+  .table tbody td {
+    color: var(--color-primary-hover);
+    padding: 1rem;
+    vertical-align: middle;
+    border: none;
+  }
+  
+  /* Striped rows */
+  .table-striped tbody tr:nth-of-type(odd) {
+    background-color: rgba(28, 26, 23, 0.5);
+  }
+  
+  .table-striped tbody tr:nth-of-type(odd):hover {
+    background-color: rgba(184, 138, 68, 0.15);
+  }
+  
+  /* Badges */
+  .badge.bg-success {
+    background-color: #27ae60 !important;
+    color: var(--color-text-light);
+    padding: 0.5rem 1rem;
+    font-weight: 600;
+  }
+  
+  .badge.bg-danger {
+    background-color: #e74c3c !important;
+    color: var(--color-text-light);
+    padding: 0.5rem 1rem;
+    font-weight: 600;
+  }
+  
+  /* Action Buttons */
+  .outline-info- {
+    background-color: var(--color-primary);
+    border: 1px solid var(--color-primary);
+    color: var(--color-bg-dark);
+    transition: all 0.3s ease;
+  }
+  
+  .outline-info-:hover {
+    background-color: var(--color-primary-hover);
+    color: var(--color-text-light);
+    border: 1px solid var(--color-primary-hover);
+    transform: scale(1.1);
+  }
+  
+  .outline-info-:focus,
+  .outline-info-:active {
+    background-color: var(--color-primary-hover) !important;
+    color: var(--color-text-light) !important;
+    border: 1px solid var(--color-primary-hover) !important;
+    box-shadow: 0 0 0 0.2rem rgba(184, 138, 68, 0.25) !important;
+  }
+  
+  /* Warning Button (Edit) */
+  .btn-outline-warning {
+    background-color: transparent;
+    border: 1px solid var(--color-primary);
+    color: var(--color-primary);
+    transition: all 0.3s ease;
+  }
+  
+  .btn-outline-warning:hover {
+    background-color: var(--color-primary);
+    color: var(--color-bg-dark);
+    border: 1px solid var(--color-primary);
+    transform: scale(1.1);
+  }
+  
+  .btn-outline-warning:focus,
+  .btn-outline-warning:active {
+    background-color: var(--color-primary) !important;
+    color: var(--color-bg-dark) !important;
+    border: 1px solid var(--color-primary) !important;
+    box-shadow: 0 0 0 0.2rem rgba(184, 138, 68, 0.25) !important;
+  }
+  
+  /* Danger Button (Delete) */
+  .btn-outline-danger {
+    background-color: transparent;
+    border: 1px solid #e74c3c;
+    color: #e74c3c;
+    transition: all 0.3s ease;
+  }
+  
+  .btn-outline-danger:hover {
+    background-color: #e74c3c;
+    color: var(--color-text-light);
+    border: 1px solid #e74c3c;
+    transform: scale(1.1);
+  }
+  
+  .btn-outline-danger:focus,
+  .btn-outline-danger:active {
+    background-color: #e74c3c !important;
+    color: var(--color-text-light) !important;
+    border: 1px solid #e74c3c !important;
+    box-shadow: 0 0 0 0.2rem rgba(231, 76, 60, 0.25) !important;
+  }
+  
+  /* Responsive Design */
+  @media (max-width: 768px) {
+    .table-responsive {
+      overflow-x: auto;
+    }
+    
+    .d-flex.justify-content-between {
+      flex-direction: column;
+      gap: 1rem;
+    }
+    
+    .add-user {
+      width: 100%;
+    }
+  }

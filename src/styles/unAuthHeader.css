@@ -1,0 +1,92 @@
+
+header {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    height: 80px;
+    padding: 8px;
+    align-items: center;
+}
+
+header nav a{
+    margin: 2px 10px;
+    text-decoration: none;
+    color: white;
+}
+
+header nav a:hover,
+header nav a {
+  transition: transform 0.2s ease;
+  display: inline-block;
+}
+header nav a:hover {
+  transform: translateY(-3px);
+}
+
+
+.h-c{
+    background-color: #1a3350;
+}
+
+.logo{
+    font-size: 25px;
+    color: white;
+    text-decoration: none;
+}
+
+header nav a.is-active-link{
+    border: 1px solid white;
+    padding: 8px 12px;
+    background-color: white;
+    color: black; /* للنص */
+    border-radius: 4px; /* شكلي أحسن */
+    transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+.un-auth-header{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem;
+    background-color: #2E1E0F;
+    color: #FDFBF6;
+    max-height: 60px;
+}
+
+.un-auth-header header{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem;
+    color: #fff;
+}
+.un-auth-header a{
+    color: #F8F5F1;
+    text-decoration: none;
+    font-size: 1.2rem;
+    font-weight: bold;
+}
+
+.un-auth-header a:hover{
+    color: #B88A44;
+    transform: scale(1.1);
+}
+
+.un-auth-header nav{
+    display: flex;
+    gap: 15px;
+}
+
+.un-auth-header nav a{
+    color: #fff;
+    text-decoration: none;
+    font-size: 0.9rem;
+    font-weight: bold;
+    transition: all 0.3s ease;
+}
+
+.un-auth-header nav a:hover{
+    color: #fff;
+    transform: scale(1.1);
+}
+
