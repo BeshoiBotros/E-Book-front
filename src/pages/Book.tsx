@@ -300,7 +300,7 @@ const Book: React.FC = () => {
       )}
 
       {/* --- Book Container (hidden until preloading is complete) --- */}
-      <div style={{...styles.background, visibility: isPreloading ? 'hidden' : 'visible' }}>
+      <div style={{...styles.background, visibility: isPreloading ? 'hidden' : 'visible', marginTop: '50px' }}>
         <Row>
           <Container style={styles.container}>
             <div style={styles.bookWrapper}>

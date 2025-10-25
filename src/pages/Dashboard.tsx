@@ -98,10 +98,10 @@ const Dashboard: React.FC = () => {
       });
     },
     onSuccess: (data) => {
-      setUsers((prev) => prev.map((u) => u.id === data.id ? data : u));
+      setUsers((prev) => prev.map((u) => (u.id === data.id ? data : u)));
       Swal.fire({
-        title: 'تم التعديل بنجاح',
-        icon: 'success',
+        title: "تم التعديل بنجاح",
+        icon: "success",
         timer: 2000,
         showConfirmButton: false,
       });
@@ -124,7 +124,7 @@ const Dashboard: React.FC = () => {
     const { name, value } = e.target;
     setFormData((prev) => ({
       ...prev,
-      [name]: name === "is_active" ? value === "true" : value
+      [name]: name === "is_active" ? value === "true" : value,
     }));
   };
 
@@ -150,9 +150,9 @@ const Dashboard: React.FC = () => {
 
   const handleUpdateUser = (e: React.FormEvent, user: User) => {
     e.preventDefault();
-    updateUserMutation.mutate({ 
-      data: formData, 
-      userId: user.id 
+    updateUserMutation.mutate({
+      data: formData,
+      userId: user.id,
     });
     setShowUpdateModal(false);
   };
@@ -189,38 +189,42 @@ const Dashboard: React.FC = () => {
     <>
       <AuthHeader />
 
-      <Container fluid className="mt-4">
-        <StatisticsCards users={users} />
-        <UsersTable
-          users={users}
-          onViewUser={handleViewUser}
-          onDeleteUser={(user: User) => handleDeleteUser(user.id)}
-          onAddUser={handleAddUser}
-          onUpdateUser={(user: User) => handleEditUser(user)}
-        />
-        <CreateUserModal
-          show={showModal}
-          onHide={() => setShowModal(false)}
-          formData={formData}
-          onSubmit={handleCreateUser}
-          onInputChange={handleInputChange}
-        />
+      <main className="" style={{marginTop: '50px'}}>
+        <Container fluid className="">
+          <StatisticsCards users={users} />
+          <UsersTable
+            users={users}
+            onViewUser={handleViewUser}
+            onDeleteUser={(user: User) => handleDeleteUser(user.id)}
+            onAddUser={handleAddUser}
+            onUpdateUser={(user: User) => handleEditUser(user)}
+          />
+          <CreateUserModal
+            show={showModal}
+            onHide={() => setShowModal(false)}
+            formData={formData}
+            onSubmit={handleCreateUser}
+            onInputChange={handleInputChange}
+          />
 
-        <UserDetailModal
-          show={showDetailModal}
-          onHide={() => setShowDetailModal(false)}
-          user={selectedUser}
-        />
+          <UserDetailModal
+            show={showDetailModal}
+            onHide={() => setShowDetailModal(false)}
+            user={selectedUser}
+          />
 
-        <UpdateUserModal
-          show={showUpdateModal}
-          onHide={() => setShowUpdateModal(false)}
-          formData={formData}
-          user={selectedUser!}
-          onSubmit={(e: React.FormEvent) => handleUpdateUser(e, selectedUser!)}
-          onInputChange={handleInputChange}
-        />
-      </Container>
+          <UpdateUserModal
+            show={showUpdateModal}
+            onHide={() => setShowUpdateModal(false)}
+            formData={formData}
+            user={selectedUser!}
+            onSubmit={(e: React.FormEvent) =>
+              handleUpdateUser(e, selectedUser!)
+            }
+            onInputChange={handleInputChange}
+          />
+        </Container>
+      </main>
     </>
   );
 };

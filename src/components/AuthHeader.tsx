@@ -1,50 +1,107 @@
 
-import "bootstrap";
-import { Link } from "react-router";
-import "../styles/authHeader.css";
-
-import Container from 'react-bootstrap/Container';
-import Nav from 'react-bootstrap/Nav';
-import Navbar from 'react-bootstrap/Navbar';
 import { NavLink, useNavigate } from 'react-router';
-import '../styles/HeaderAuth.css'
 import Cookies from "js-cookie";
 
 
-const AuthHeader = () => {
-  
-  const navigate = useNavigate();
 
+import { useState, useEffect } from 'react';
+import { Menu, X } from 'lucide-react';
+import { Link } from 'react-router-dom';
+
+const AuthHeader = () => {
+  const navigate=useNavigate();
+  const [isScrolled, setIsScrolled] = useState(false);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setIsScrolled(window.scrollY > 50);
+    };
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
+  const navItems = [
+    { label: 'لوحة التحكم', href: '/dashboard' },
+    { label: 'تسجيل خروج', href: '/login' },
+    { label: 'الكتاب', href: '/book' }
+  ];
+
+  const scrollToSection = (href: string) => {
+    const element = document.querySelector(href);
+    if (element) {
+      element.scrollIntoView({ behavior: 'smooth' });
+      setIsMobileMenuOpen(false);
+    }
+  };
   const handleLogout = () =>{
     Cookies.remove('access');
     navigate("/login");
   } 
 
   return (
+    <header className={` ${isScrolled ? 'scrolled' : ''}`} style={{backgroundColor:'#2e1d0f'}}>
+      <nav className="container py-3">
+        <div className="d-flex align-items-center justify-content-between">
+          {/* Logo/Name */}
+          <div className="fs-3 fw-bold text-primary-custom">
+            د. خيري الكباش
+          </div>
 
-    <Navbar expand="lg" className="bg-body-primary">
-      <Container className='contain'>
-        <Navbar.Brand className='logo' as={NavLink} to="/">لوجو</Navbar.Brand>
-        <Navbar.Toggle aria-controls="basic-navbar-nav" />
-        <Navbar.Collapse id="basic-navbar-nav">
-          <Nav className="me-auto">
-            <Nav.Link 
-              as={NavLink} 
-              to="/dashboard"
+          {/* Desktop Navigation */}
+          <div className="d-none d-md-flex align-items-center gap-4">
+            {navItems.map((item) => (
+              <Link
+                key={item.href}
+                onClick={() => item.href === '/login' ? handleLogout() : scrollToSection(item.href)}
+                to={item.href}
+                className="btn btn-link nav-link-custom text-decoration-none"
+              >
+                {item.label}
+              </Link>
+            ))}
+            <button
+              onClick={() => scrollToSection('#ebook')}
+              className="btn btn-primary-custom px-4"
             >
-              لوحة القيادة
-            </Nav.Link>
-            <Nav.Link 
-              as={NavLink} 
-              to="/book"
-            >
-              الكتاب
-            </Nav.Link>
-            <Nav.Link href="/login" onClick={handleLogout}>تسجيل خروج</Nav.Link>
-          </Nav>
-        </Navbar.Collapse>
-      </Container>
-    </Navbar>
+              احصل على الكتاب
+            </button>
+          </div>
+
+          {/* Mobile Menu Button */}
+          <button
+            onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+            className="btn btn-link d-md-none text-white p-0"
+          >
+            {isMobileMenuOpen ? <X size={28} /> : <Menu size={28} />}
+          </button>
+        </div>
+
+        {/* Mobile Navigation */}
+        {isMobileMenuOpen && (
+          <div className="d-md-none mt-3 pb-3 animate-slide-up">
+            <div className="d-flex flex-column gap-3">
+              {navItems.map((item) => (
+                <Link
+                //   key={item.href}
+                  to={item.href}
+                //   onClick={() => scrollToSection(item.href)}
+                  className="btn btn-link nav-link-custom text-decoration-none text-end"
+                >
+                  {item.label}
+                </Link>
+              ))}
+              <button
+                onClick={() => scrollToSection('#ebook')}
+                className="btn btn-primary-custom w-100"
+              >
+                احصل على الكتاب
+              </button>
+            </div>
+          </div>
+        )}
+      </nav>
+    </header>
   );
 };
 
