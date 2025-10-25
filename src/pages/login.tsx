@@ -30,13 +30,17 @@ const Login: React.FC = () => {
     },
     onSuccess: (data) => {
       Cookies.set("access", data.access, { expires: 7 });
+      Cookies.set("role", data.role, { expires: 7 });
       Swal.fire({
         icon: "success",
         title: "Login Successfully!",
         timer: 2000,
         showConfirmButton: false,
       });
-
+      if(data.role==="User"){
+        navigate("/book");
+        return;
+      }
       navigate("/dashboard");
     },
     onError: (error) => {

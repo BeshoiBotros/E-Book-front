@@ -1,5 +1,5 @@
 
-import { NavLink, useNavigate } from 'react-router';
+import { href, NavLink, useNavigate } from 'react-router';
 import Cookies from "js-cookie";
 
 
@@ -22,6 +22,7 @@ const AuthHeader = () => {
   }, []);
 
   const navItems = [
+    {label : 'الرئيسية', href : '/'},
     { label: 'لوحة التحكم', href: '/dashboard' },
     { label: 'تسجيل خروج', href: '/login' },
     { label: 'الكتاب', href: '/book' }
@@ -36,8 +37,12 @@ const AuthHeader = () => {
   };
   const handleLogout = () =>{
     Cookies.remove('access');
+    localStorage.removeItem('book-cache');
     navigate("/login");
-  } 
+  }
+  const getRole = () =>{
+    return Cookies.get("role");
+  }
 
   return (
     <header className={` ${isScrolled ? 'scrolled' : ''}`} style={{backgroundColor:'#2e1d0f'}}>
@@ -55,17 +60,12 @@ const AuthHeader = () => {
                 key={item.href}
                 onClick={() => item.href === '/login' ? handleLogout() : scrollToSection(item.href)}
                 to={item.href}
-                className="btn btn-link nav-link-custom text-decoration-none"
+                className={`btn btn-link nav-link-custom text-decoration-none ${item.href === '/dashboard' && getRole()!=="Admin" ? 'd-none':''}`}
               >
                 {item.label}
               </Link>
             ))}
-            <button
-              onClick={() => scrollToSection('#ebook')}
-              className="btn btn-primary-custom px-4"
-            >
-              احصل على الكتاب
-            </button>
+
           </div>
 
           {/* Mobile Menu Button */}
