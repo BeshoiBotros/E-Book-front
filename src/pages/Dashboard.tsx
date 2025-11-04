@@ -11,14 +11,17 @@ import { useQuery } from "@tanstack/react-query";
 import { createUser, featchAllUsers, updateUser } from "../api/accounts";
 import Swal from "sweetalert2";
 import { useMutation } from "@tanstack/react-query";
+import Cookies from "js-cookie";
+import { useNavigate } from "react-router";
 
 const Dashboard: React.FC = () => {
+  const navigate = useNavigate();
   const [users, setUsers] = useState<User[]>([]);
   const [showModal, setShowModal] = useState(false);
   const [showDetailModal, setShowDetailModal] = useState(false);
   const [showUpdateModal, setShowUpdateModal] = useState(false);
   const [selectedUser, setSelectedUser] = useState<User | null>(null);
-
+  const [role, setRole] = useState<string | null>(null);
   const {
     data: allUsers,
     isLoading,
@@ -43,6 +46,17 @@ const Dashboard: React.FC = () => {
       setUsers(allUsers);
     }
   }, [isSuccess, allUsers]);
+
+  React.useEffect(() => {
+    const roleCookie = Cookies.get("role");
+    setRole(roleCookie ?? null);
+  }, []);
+
+  React.useEffect(() => {
+    if (role && role !== "Admin") {
+      navigate("/book");
+    }
+  }, [role]);
 
   const createUserMutation = useMutation({
     mutationFn: createUser,
