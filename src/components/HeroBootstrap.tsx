@@ -1,13 +1,7 @@
-import { Download, Scale } from 'lucide-react';
+import { Scale } from 'lucide-react';
 import heroImage from '../assets/login-bg.jpg';
 
 const HeroBootstrap = () => {
-  const scrollToEbook = () => {
-    const element = document.querySelector('#ebook');
-    if (element) {
-      element.scrollIntoView({ behavior: 'smooth' });
-    }
-  };
 
   return (
     <section id="home" className="hero-section d-flex align-items-center">
@@ -65,25 +59,6 @@ const HeroBootstrap = () => {
               </div>
             </div>
 
-            {/* CTA Buttons */}
-            <div className="d-flex flex-column flex-sm-row gap-3">
-              <button
-                onClick={scrollToEbook}
-                className="btn btn-primary-custom btn-lg fs-5 fw-bold"
-              >
-                <Download className="ms-2" size={24} />
-                احصل على الكتاب الإلكتروني
-              </button>
-              <button
-                onClick={() => {
-                  const element = document.querySelector('#contact');
-                  if (element) element.scrollIntoView({ behavior: 'smooth' });
-                }}
-                className="btn btn-outline-custom btn-lg fs-5 fw-bold"
-              >
-                تواصل معنا
-              </button>
-            </div>
           </div>
         </div>
       </div>

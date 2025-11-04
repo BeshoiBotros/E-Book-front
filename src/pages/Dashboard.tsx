@@ -11,14 +11,17 @@ import { useQuery } from "@tanstack/react-query";
 import { createUser, featchAllUsers, updateUser } from "../api/accounts";
 import Swal from "sweetalert2";
 import { useMutation } from "@tanstack/react-query";
+import Cookies from "js-cookie";
+import { useNavigate } from "react-router";
 
 const Dashboard: React.FC = () => {
+  const navigate = useNavigate();
   const [users, setUsers] = useState<User[]>([]);
   const [showModal, setShowModal] = useState(false);
   const [showDetailModal, setShowDetailModal] = useState(false);
   const [showUpdateModal, setShowUpdateModal] = useState(false);
   const [selectedUser, setSelectedUser] = useState<User | null>(null);
-
+  const [role, setRole] = useState<string | null>(null);
   const {
     data: allUsers,
     isLoading,
@@ -43,6 +46,17 @@ const Dashboard: React.FC = () => {
       setUsers(allUsers);
     }
   }, [isSuccess, allUsers]);
+
+  React.useEffect(() => {
+    const roleCookie = Cookies.get("role");
+    setRole(roleCookie ?? null);
+  }, []);
+
+  React.useEffect(() => {
+    if (role && role !== "Admin") {
+      navigate("/book");
+    }
+  }, [role]);
 
   const createUserMutation = useMutation({
     mutationFn: createUser,
@@ -98,10 +112,10 @@ const Dashboard: React.FC = () => {
       });
     },
     onSuccess: (data) => {
-      setUsers((prev) => prev.map((u) => u.id === data.id ? data : u));
+      setUsers((prev) => prev.map((u) => (u.id === data.id ? data : u)));
       Swal.fire({
-        title: 'تم التعديل بنجاح',
-        icon: 'success',
+        title: "تم التعديل بنجاح",
+        icon: "success",
         timer: 2000,
         showConfirmButton: false,
       });
@@ -124,7 +138,7 @@ const Dashboard: React.FC = () => {
     const { name, value } = e.target;
     setFormData((prev) => ({
       ...prev,
-      [name]: name === "is_active" ? value === "true" : value
+      [name]: name === "is_active" ? value === "true" : value,
     }));
   };
 
@@ -150,9 +164,9 @@ const Dashboard: React.FC = () => {
 
   const handleUpdateUser = (e: React.FormEvent, user: User) => {
     e.preventDefault();
-    updateUserMutation.mutate({ 
-      data: formData, 
-      userId: user.id 
+    updateUserMutation.mutate({
+      data: formData,
+      userId: user.id,
     });
     setShowUpdateModal(false);
   };

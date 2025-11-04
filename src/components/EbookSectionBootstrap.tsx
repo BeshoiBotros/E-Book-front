@@ -35,7 +35,7 @@ const EbookSectionBootstrap = () => {
                       <span>عرض خاص</span>
                     </div>
 
-                    <h2 className="display-5 fw-bold mb-3">
+                    <h2 className="display-5 fw-bold mb-3 text-primary-custom">
                       احصل على كتابك
                       <span className="d-block text-primary-custom mt-2">الإلكتروني</span>
                     </h2>
@@ -71,7 +71,7 @@ const EbookSectionBootstrap = () => {
                       <div className="card card-custom p-4 shadow-lg" style={{ backgroundColor: 'rgba(31, 41, 55, 0.9)', backdropFilter: 'blur(10px)' }}>
                         <div className="text-center">
                           <BookOpen className="text-primary-custom mx-auto mb-3" size={80} />
-                          <h3 className="fs-3 fw-bold mb-2">الحماية الجنائية</h3>
+                          {/* <h3 className="fs-3 fw-bold mb-2">الحماية الجنائية</h3>
                           <h4 className="fs-4 fw-semibold text-primary-custom mb-3">لحقوق الإنسان</h4>
                           <p className="text-muted-custom mb-4">
                             دراسة مقارنة بأحكام ومبادئ الشريعة الإسلامية والمواثيق الدولية
@@ -79,14 +79,15 @@ const EbookSectionBootstrap = () => {
                           <div className="border-top pt-3 mt-3" style={{ borderColor: 'rgba(198, 140, 55, 0.3) !important' }}>
                             <p className="fw-bold mb-1">د. خيري أحمد الكباش</p>
                             <p className="small text-muted-custom">قاضي ودكتور في القانون الجنائي</p>
-                          </div>
+                          </div> */}
                         </div>
+                          <img className='img' src="/src/assets/8olaf.jpeg" alt="" />
                       </div>
                     </div>
 
                     {/* Floating Stats */}
                     <div className="position-absolute bg-primary-custom text-white rounded-circle d-flex align-items-center justify-content-center shadow-lg" 
-                         style={{ top: '-16px', left: '-16px', width: '80px', height: '80px' }}>
+                         style={{ top: '5px', left: '5px', width: '80px', height: '80px' }}>
                       <div className="text-center">
                         <p className="fs-4 fw-bold mb-0">200+</p>
                         <p className="small mb-0">صفحة</p>

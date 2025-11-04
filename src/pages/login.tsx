@@ -30,6 +30,7 @@ const Login: React.FC = () => {
     },
     onSuccess: (data) => {
       Cookies.set("access", data.access, { expires: 7 });
+      Cookies.set("role", data.role, {expires: 7});
       Swal.fire({
         icon: "success",
         title: "Login Successfully!",
