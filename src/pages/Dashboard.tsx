@@ -203,38 +203,42 @@ const Dashboard: React.FC = () => {
     <>
       <AuthHeader />
 
-      <Container fluid className="mt-4">
-        <StatisticsCards users={users} />
-        <UsersTable
-          users={users}
-          onViewUser={handleViewUser}
-          onDeleteUser={(user: User) => handleDeleteUser(user.id)}
-          onAddUser={handleAddUser}
-          onUpdateUser={(user: User) => handleEditUser(user)}
-        />
-        <CreateUserModal
-          show={showModal}
-          onHide={() => setShowModal(false)}
-          formData={formData}
-          onSubmit={handleCreateUser}
-          onInputChange={handleInputChange}
-        />
+      <main className="" style={{marginTop: '50px'}}>
+        <Container fluid className="">
+          <StatisticsCards users={users} />
+          <UsersTable
+            users={users}
+            onViewUser={handleViewUser}
+            onDeleteUser={(user: User) => handleDeleteUser(user.id)}
+            onAddUser={handleAddUser}
+            onUpdateUser={(user: User) => handleEditUser(user)}
+          />
+          <CreateUserModal
+            show={showModal}
+            onHide={() => setShowModal(false)}
+            formData={formData}
+            onSubmit={handleCreateUser}
+            onInputChange={handleInputChange}
+          />
 
-        <UserDetailModal
-          show={showDetailModal}
-          onHide={() => setShowDetailModal(false)}
-          user={selectedUser}
-        />
+          <UserDetailModal
+            show={showDetailModal}
+            onHide={() => setShowDetailModal(false)}
+            user={selectedUser}
+          />
 
-        <UpdateUserModal
-          show={showUpdateModal}
-          onHide={() => setShowUpdateModal(false)}
-          formData={formData}
-          user={selectedUser!}
-          onSubmit={(e: React.FormEvent) => handleUpdateUser(e, selectedUser!)}
-          onInputChange={handleInputChange}
-        />
-      </Container>
+          <UpdateUserModal
+            show={showUpdateModal}
+            onHide={() => setShowUpdateModal(false)}
+            formData={formData}
+            user={selectedUser!}
+            onSubmit={(e: React.FormEvent) =>
+              handleUpdateUser(e, selectedUser!)
+            }
+            onInputChange={handleInputChange}
+          />
+        </Container>
+      </main>
     </>
   );
 };

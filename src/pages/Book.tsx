@@ -326,6 +326,7 @@ const Book: React.FC = () => {
         </div>
       )}
 
+
       <div
         style={{
           ...styles.background,
@@ -333,6 +334,10 @@ const Book: React.FC = () => {
           marginTop: "50px",
         }}
       >
+
+      {/* --- Book Container (hidden until preloading is complete) --- */}
+      <div style={{...styles.background, visibility: isPreloading ? 'hidden' : 'visible', marginTop: '50px' }}>
+
         <Row>
           <Container style={styles.container}>
             <div style={styles.bookWrapper}>
@@ -407,6 +412,7 @@ const Book: React.FC = () => {
                         textAlign: "right",
                       }}
                     >
+                     
                       <img
                         src={src}
                         alt={`page ${i + 1}`}

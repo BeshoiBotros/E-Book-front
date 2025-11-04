@@ -89,7 +89,7 @@ const EbookSectionBootstrap = () => {
                     <div className="position-absolute bg-primary-custom text-white rounded-circle d-flex align-items-center justify-content-center shadow-lg" 
                          style={{ top: '5px', left: '5px', width: '80px', height: '80px' }}>
                       <div className="text-center">
-                        <p className="fs-4 fw-bold mb-0">200+</p>
+                        <p className="fs-4 fw-bold mb-0">600+</p>
                         <p className="small mb-0">صفحة</p>
                       </div>
                     </div>
