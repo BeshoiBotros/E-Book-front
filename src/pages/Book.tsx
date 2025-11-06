@@ -230,7 +230,6 @@ const Book: React.FC = () => {
       pagesArray = raw;
       total_pages = raw.length;
     } else {
-      // try common shapes
       pagesArray =
         raw.pages ??
         raw.results ??
@@ -240,15 +239,27 @@ const Book: React.FC = () => {
         raw.total_pages ?? raw.total ?? raw.count ?? pagesArray.length ?? 0;
     }
 
+    if (pagesArray.length === 0) {
+      console.warn(
+        `Empty pages returned for range ${pageParam}-${
+          pageParam + PAGES_PER_FETCH - 1
+        }, total_pages: ${total_pages}`
+      );
+    }
+
     return { pages: pagesArray, total_pages };
   };
 
-  const { data, fetchNextPage, hasNextPage, isFetchingNextPage } =
+  const { data, fetchNextPage, hasNextPage, isFetchingNextPage, error } =
     useInfiniteQuery({
       queryKey: ["book-cache"],
       queryFn: fetchPages,
       initialPageParam: 1,
       getNextPageParam: (lastPage, allPages) => {
+        if ((lastPage.pages?.length ?? 0) === 0) {
+          return undefined;
+        }
+
         const loadedCount = allPages.reduce(
           (acc, g) => acc + (g.pages?.length ?? 0),
           0
@@ -257,26 +268,28 @@ const Book: React.FC = () => {
         return nextStart <= (lastPage.total_pages ?? 0) ? nextStart : undefined;
       },
       staleTime: Infinity,
+      gcTime: Infinity, // Optimization: Persist cache indefinitely (no garbage collection)
     });
 
   const pages = data?.pages?.flatMap((g) => g.pages) ?? [];
   const totalPages = data?.pages?.[0]?.total_pages ?? pages.length ?? 0;
 
-  // Preload loop: keep fetching until we have all pages (if totalPages is known)
   useEffect(() => {
     if (!totalPages) return;
-    if (pages.length >= totalPages) {
+
+    if (pages.length >= totalPages || !hasNextPage) {
       if (isPreloading) {
         setIsPreloading(false);
         setCurrentPage(0);
         try {
           bookRef.current?.pageFlip()?.turnToPage(0);
         } catch (e) {
-          // ignore if pageFlip not ready
+          // ignore
         }
       }
       return;
     }
+
     if (hasNextPage && !isFetchingNextPage) {
       fetchNextPage();
     }
@@ -288,6 +301,10 @@ const Book: React.FC = () => {
     fetchNextPage,
     isPreloading,
   ]);
+  
+  useEffect(() => {
+    console.log(data);
+  }, [data]);
 
   const handleFlip = (e: any) => {
     // HTMLFlipBook emits an event object with `data` set to the new page index
@@ -334,122 +351,114 @@ const Book: React.FC = () => {
         }}
       >
         {/* --- Book Container (hidden until preloading is complete) --- */}
-        <div
-          style={{
-            ...styles.background,
-            visibility: isPreloading ? "hidden" : "visible",
-            marginTop: "50px",
-          }}
-        >
-          <Row>
-            <Container style={styles.container}>
-              <div style={styles.bookWrapper}>
-                <div style={styles.pageJumpContainer}>
-                  <span style={styles.pageJumpLabel}>اذهب إلى صفحة:</span>
-                  <input
-                    type="number"
-                    min={1}
-                    max={totalPages || 1}
-                    value={pageInput}
-                    onChange={(e) => setPageInput(e.target.value)}
-                    onKeyDown={handleKeyDown}
-                    placeholder={`1-${totalPages || "..."}`}
-                    style={styles.pageJumpInput}
-                  />
-                  <button
-                    onClick={handlePageJump}
-                    style={styles.pageJumpButton}
-                    onMouseEnter={(e) => {
-                      (
-                        e.currentTarget as HTMLButtonElement
-                      ).style.backgroundColor = "#D4A053";
-                      (e.currentTarget as HTMLButtonElement).style.transform =
-                        "translateY(-2px)";
-                      (e.currentTarget as HTMLButtonElement).style.boxShadow =
-                        "0 4px 12px rgba(184, 138, 68, 0.4)";
-                    }}
-                    onMouseLeave={(e) => {
-                      (
-                        e.currentTarget as HTMLButtonElement
-                      ).style.backgroundColor = "#B88A44";
-                      (e.currentTarget as HTMLButtonElement).style.transform =
-                        "translateY(0)";
-                      (e.currentTarget as HTMLButtonElement).style.boxShadow =
-                        "none";
-                    }}
-                  >
-                    اذهب
-                  </button>
-                </div>
-
-                <HTMLFlipBook
-                  ref={bookRef}
-                  style={styles.flipBook}
-                  width={dimensions.width}
-                  height={dimensions.height}
-                  startPage={currentPage}
-                  maxWidth={dimensions.width}
-                  size="stretch"
-                  className="custom-flip-book rtl-book"
-                  onFlip={handleFlip}
-                  drawShadow={true}
-                  showCover={!isMobile}
-                  minWidth={150}
-                  minHeight={206}
-                  maxHeight={700}
-                  flippingTime={800}
-                  usePortrait={isMobile}
-                  startZIndex={0}
-                  autoSize={true}
-                  maxShadowOpacity={0.8}
-                  mobileScrollSupport={true}
-                  clickEventForward={true}
-                  useMouseEvents={true}
-                  swipeDistance={30}
-                  showPageCorners={true}
-                  disableFlipByClick={false}
+        <Row>
+          <Container style={styles.container}>
+            <div style={styles.bookWrapper}>
+              <div style={styles.pageJumpContainer}>
+                <span style={styles.pageJumpLabel}>اذهب إلى صفحة:</span>
+                <input
+                  type="number"
+                  min={1}
+                  max={totalPages || 1}
+                  value={pageInput}
+                  onChange={(e) => setPageInput(e.target.value)}
+                  onKeyDown={handleKeyDown}
+                  placeholder={`1-${totalPages || "..."}`}
+                  style={styles.pageJumpInput}
+                />
+                <button
+                  onClick={handlePageJump}
+                  style={styles.pageJumpButton}
+                  onMouseEnter={(e) => {
+                    (
+                      e.currentTarget as HTMLButtonElement
+                    ).style.backgroundColor = "#D4A053";
+                    (e.currentTarget as HTMLButtonElement).style.transform =
+                      "translateY(-2px)";
+                    (e.currentTarget as HTMLButtonElement).style.boxShadow =
+                      "0 4px 12px rgba(184, 138, 68, 0.4)";
+                  }}
+                  onMouseLeave={(e) => {
+                    (
+                      e.currentTarget as HTMLButtonElement
+                    ).style.backgroundColor = "#B88A44";
+                    (e.currentTarget as HTMLButtonElement).style.transform =
+                      "translateY(0)";
+                    (e.currentTarget as HTMLButtonElement).style.boxShadow =
+                      "none";
+                  }}
                 >
-                  {pages.map((src, i) => (
-                    <div key={i} className="page">
-                      <div
-                        style={{
-                          ...styles.pageContent,
-                          direction: "rtl",
-                          textAlign: "right",
-                        }}
-                      >
-                        <img
-                          src={src}
-                          alt={`page ${i + 1}`}
-                          style={styles.pageImage}
-                          loading="lazy"
-                        />
-                        <div style={styles.pageNumber}>{i + 1}</div>
-                      </div>
-                    </div>
-                  ))}
-                </HTMLFlipBook>
+                  اذهب
+                </button>
+              </div>
 
-                <div style={styles.progressContainer}>
-                  <div style={styles.progressBar}>
+              <HTMLFlipBook
+                ref={bookRef}
+                style={styles.flipBook}
+                width={dimensions.width}
+                height={dimensions.height}
+                startPage={currentPage}
+                maxWidth={dimensions.width}
+                size="stretch"
+                className="custom-flip-book rtl-book"
+                onFlip={handleFlip}
+                drawShadow={true}
+                showCover={!isMobile}
+                minWidth={150}
+                minHeight={206}
+                maxHeight={700}
+                flippingTime={800}
+                usePortrait={isMobile}
+                startZIndex={0}
+                autoSize={true}
+                maxShadowOpacity={0.8}
+                mobileScrollSupport={true}
+                clickEventForward={true}
+                useMouseEvents={true}
+                swipeDistance={30}
+                showPageCorners={true}
+                disableFlipByClick={false}
+              >
+                {pages.map((src, i) => (
+                  <div key={i} className="page">
                     <div
                       style={{
-                        ...styles.progressFill,
-                        width:
-                          totalPages > 0
-                            ? `${((currentPage + 1) / totalPages) * 100}%`
-                            : "0%",
+                        ...styles.pageContent,
+                        direction: "rtl",
+                        textAlign: "right",
                       }}
-                    />
+                    >
+                      <img
+                        src={src}
+                        alt={`page ${i + 1}`}
+                        style={styles.pageImage}
+                        loading="lazy"
+                      />
+                      <div style={styles.pageNumber}>{i + 1}</div>
+                    </div>
                   </div>
-                  <span style={styles.progressText}>
-                    صفحة {currentPage + 1} من {totalPages || "..."}
-                  </span>
+                ))}
+              </HTMLFlipBook>
+
+              <div style={styles.progressContainer}>
+                <div style={styles.progressBar}>
+                  <div
+                    style={{
+                      ...styles.progressFill,
+                      width:
+                        totalPages > 0
+                          ? `${((currentPage + 1) / totalPages) * 100}%`
+                          : "0%",
+                    }}
+                  />
                 </div>
+                <span style={styles.progressText}>
+                  صفحة {currentPage + 1} من {totalPages || "..."}
+                </span>
               </div>
-            </Container>
-          </Row>
-        </div>
+            </div>
+          </Container>
+        </Row>
       </div>
     </>
   );
