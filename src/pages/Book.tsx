@@ -41,7 +41,6 @@ const styles = {
     boxShadow: "0 20px 40px rgba(0, 0, 0, 0.3)",
     borderRadius: "8px",
   },
-
   pageContent: {
     width: "100%",
     height: "100%",
@@ -215,7 +214,6 @@ const Book: React.FC = () => {
     return () => window.removeEventListener("resize", updateDimensions);
   }, []);
 
-  // Robust fetch that normalizes server response into { pages: string[], total_pages: number }
   const fetchPages = async ({ pageParam = 1 }) => {
     const res = await axios.get(`${BASE_API_URL}/book/page/`, {
       params: { start: pageParam, end: pageParam + PAGES_PER_FETCH - 1 },
@@ -230,7 +228,6 @@ const Book: React.FC = () => {
       pagesArray = raw;
       total_pages = raw.length;
     } else {
-      // try common shapes
       pagesArray =
         raw.pages ??
         raw.results ??
@@ -254,7 +251,9 @@ const Book: React.FC = () => {
           0
         );
         const nextStart = loadedCount + 1;
-        return nextStart <= (lastPage.total_pages ?? 0) ? nextStart : undefined;
+        return nextStart <= (lastPage.total_pages ?? 0)
+          ? nextStart
+          : undefined;
       },
       staleTime: Infinity,
     });
@@ -262,7 +261,6 @@ const Book: React.FC = () => {
   const pages = data?.pages?.flatMap((g) => g.pages) ?? [];
   const totalPages = data?.pages?.[0]?.total_pages ?? pages.length ?? 0;
 
-  // Preload loop: keep fetching until we have all pages (if totalPages is known)
   useEffect(() => {
     if (!totalPages) return;
     if (pages.length >= totalPages) {
@@ -271,9 +269,7 @@ const Book: React.FC = () => {
         setCurrentPage(0);
         try {
           bookRef.current?.pageFlip()?.turnToPage(0);
-        } catch (e) {
-          // ignore if pageFlip not ready
-        }
+        } catch (e) { }
       }
       return;
     }
@@ -290,7 +286,6 @@ const Book: React.FC = () => {
   ]);
 
   const handleFlip = (e: any) => {
-    // HTMLFlipBook emits an event object with `data` set to the new page index
     setCurrentPage(e?.data ?? 0);
   };
 
@@ -326,7 +321,7 @@ const Book: React.FC = () => {
         </div>
       )}
 
-
+      {/* --- Book Container --- */}
       <div
         style={{
           ...styles.background,
@@ -334,10 +329,6 @@ const Book: React.FC = () => {
           marginTop: "50px",
         }}
       >
-
-      {/* --- Book Container (hidden until preloading is complete) --- */}
-      <div style={{...styles.background, visibility: isPreloading ? 'hidden' : 'visible', marginTop: '50px' }}>
-
         <Row>
           <Container style={styles.container}>
             <div style={styles.bookWrapper}>
@@ -357,19 +348,17 @@ const Book: React.FC = () => {
                   onClick={handlePageJump}
                   style={styles.pageJumpButton}
                   onMouseEnter={(e) => {
-                    (e.currentTarget as HTMLButtonElement).style.backgroundColor =
-                      "#D4A053";
-                    (e.currentTarget as HTMLButtonElement).style.transform =
-                      "translateY(-2px)";
-                    (e.currentTarget as HTMLButtonElement).style.boxShadow =
+                    const btn = e.currentTarget as HTMLButtonElement;
+                    btn.style.backgroundColor = "#D4A053";
+                    btn.style.transform = "translateY(-2px)";
+                    btn.style.boxShadow =
                       "0 4px 12px rgba(184, 138, 68, 0.4)";
                   }}
                   onMouseLeave={(e) => {
-                    (e.currentTarget as HTMLButtonElement).style.backgroundColor =
-                      "#B88A44";
-                    (e.currentTarget as HTMLButtonElement).style.transform =
-                      "translateY(0)";
-                    (e.currentTarget as HTMLButtonElement).style.boxShadow = "none";
+                    const btn = e.currentTarget as HTMLButtonElement;
+                    btn.style.backgroundColor = "#B88A44";
+                    btn.style.transform = "translateY(0)";
+                    btn.style.boxShadow = "none";
                   }}
                 >
                   اذهب
@@ -412,7 +401,6 @@ const Book: React.FC = () => {
                         textAlign: "right",
                       }}
                     >
-                     
                       <img
                         src={src}
                         alt={`page ${i + 1}`}
