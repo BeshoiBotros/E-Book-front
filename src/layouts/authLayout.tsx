@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import { Navigate, Outlet, useNavigate } from "react-router";
+import { Outlet, useNavigate } from "react-router";
 import { getTokenFromCookies } from "../api/auth";
 
 const AuthLayout = () => {

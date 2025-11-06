@@ -41,7 +41,6 @@ const styles = {
     boxShadow: "0 20px 40px rgba(0, 0, 0, 0.3)",
     borderRadius: "8px",
   },
-
   pageContent: {
     width: "100%",
     height: "100%",
@@ -215,7 +214,6 @@ const Book: React.FC = () => {
     return () => window.removeEventListener("resize", updateDimensions);
   }, []);
 
-  // Robust fetch that normalizes server response into { pages: string[], total_pages: number }
   const fetchPages = async ({ pageParam = 1 }) => {
     const res = await axios.get(`${BASE_API_URL}/book/page/`, {
       params: { start: pageParam, end: pageParam + PAGES_PER_FETCH - 1 },
@@ -265,7 +263,9 @@ const Book: React.FC = () => {
           0
         );
         const nextStart = loadedCount + 1;
-        return nextStart <= (lastPage.total_pages ?? 0) ? nextStart : undefined;
+        return nextStart <= (lastPage.total_pages ?? 0)
+          ? nextStart
+          : undefined;
       },
       staleTime: Infinity,
       gcTime: Infinity, // Optimization: Persist cache indefinitely (no garbage collection)
@@ -283,9 +283,7 @@ const Book: React.FC = () => {
         setCurrentPage(0);
         try {
           bookRef.current?.pageFlip()?.turnToPage(0);
-        } catch (e) {
-          // ignore
-        }
+
       }
       return;
     }
@@ -307,7 +305,6 @@ const Book: React.FC = () => {
   }, [data]);
 
   const handleFlip = (e: any) => {
-    // HTMLFlipBook emits an event object with `data` set to the new page index
     setCurrentPage(e?.data ?? 0);
   };
 
@@ -343,6 +340,7 @@ const Book: React.FC = () => {
         </div>
       )}
 
+
       <div
         style={{
           ...styles.background,
@@ -350,7 +348,7 @@ const Book: React.FC = () => {
           marginTop: "50px",
         }}
       >
-        {/* --- Book Container (hidden until preloading is complete) --- */}
+
         <Row>
           <Container style={styles.container}>
             <div style={styles.bookWrapper}>
@@ -370,6 +368,7 @@ const Book: React.FC = () => {
                   onClick={handlePageJump}
                   style={styles.pageJumpButton}
                   onMouseEnter={(e) => {
+
                     (
                       e.currentTarget as HTMLButtonElement
                     ).style.backgroundColor = "#D4A053";
@@ -386,6 +385,19 @@ const Book: React.FC = () => {
                       "translateY(0)";
                     (e.currentTarget as HTMLButtonElement).style.boxShadow =
                       "none";
+
+                    const btn = e.currentTarget as HTMLButtonElement;
+                    btn.style.backgroundColor = "#D4A053";
+                    btn.style.transform = "translateY(-2px)";
+                    btn.style.boxShadow =
+                      "0 4px 12px rgba(184, 138, 68, 0.4)";
+                  }}
+                  onMouseLeave={(e) => {
+                    const btn = e.currentTarget as HTMLButtonElement;
+                    btn.style.backgroundColor = "#B88A44";
+                    btn.style.transform = "translateY(0)";
+                    btn.style.boxShadow = "none";
+
                   }}
                 >
                   اذهب
@@ -465,3 +477,4 @@ const Book: React.FC = () => {
 };
 
 export default Book;
+
