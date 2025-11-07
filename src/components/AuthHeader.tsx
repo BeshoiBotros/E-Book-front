@@ -1,9 +1,6 @@
 
 import { NavLink, useNavigate } from 'react-router';
 import Cookies from "js-cookie";
-
-
-
 import { useState, useEffect } from 'react';
 import { Menu, X } from 'lucide-react';
 import { Link } from 'react-router-dom';
@@ -24,7 +21,8 @@ const AuthHeader = () => {
   const navItems = [
     { label: 'لوحة التحكم', href: '/dashboard' },
     { label: 'تسجيل خروج', href: '/login' },
-    { label: 'الكتاب', href: '/book' }
+    { label: 'الكتاب', href: '/book' },
+    { label: 'الرئيسية', href: '/' }
   ];
 
   const scrollToSection = (href: string) => {
@@ -36,6 +34,7 @@ const AuthHeader = () => {
   };
   const handleLogout = () =>{
     Cookies.remove('access');
+    Cookies.remove('role')
     navigate("/login");
   } 
 

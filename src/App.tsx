@@ -41,11 +41,11 @@ function App() {
           {/* Auth Guard layout */}
           <Route element={<AuthLayout />}>
             <Route path="/dashboard" element={<Dashboard />} />
-            <Route path="/book" element={<Book />} />
           </Route>
 
           {/* public pages */}
           <Route element={<UnAuthLayout />}>
+            <Route path="/book" element={<Book />} />
             <Route path="/login" element={<Login />} />
             <Route path="/" element={<Index />} />
           </Route>

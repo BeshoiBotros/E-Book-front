@@ -13,6 +13,7 @@ import Swal from "sweetalert2";
 import { useMutation } from "@tanstack/react-query";
 import Cookies from "js-cookie";
 import { useNavigate } from "react-router";
+import HeaderBootstrap from "../components/HeaderBootstrap";
 
 const Dashboard: React.FC = () => {
   const navigate = useNavigate();
@@ -201,7 +202,7 @@ const Dashboard: React.FC = () => {
 
   return (
     <>
-      <AuthHeader />
+      <HeaderBootstrap />
 
       <main className="" style={{marginTop: '50px'}}>
         <Container fluid className="">

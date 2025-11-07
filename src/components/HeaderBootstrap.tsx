@@ -1,24 +1,35 @@
 import { useState, useEffect } from "react";
 import { Menu, X } from "lucide-react";
 import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+import { getTokenFromCookies } from "../api/auth";
+import Cookies from "js-cookie";
+
 
 const HeaderBootstrap = () => {
+  const token = getTokenFromCookies();
+  const role = Cookies.get('role');
+  const [isAuthenticated, setIsAuthenticated] = useState(false)
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const navigate = useNavigate();
 
   useEffect(() => {
+    token ? setIsAuthenticated(true) : setIsAuthenticated(false)
     const handleScroll = () => {
       setIsScrolled(window.scrollY > 50);
     };
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
-
+  const handleLogout = () => {
+    Cookies.remove('access');
+    Cookies.remove('role')
+  }
   const navItems = [
     { label: "الرئيسية", href: "/" },
-    { label: "تسجيل دخول", href: "/login" },
     { label: "الخدمات", href: "/#services" },
-    { label: "اتصل بنا", href: "/#contact" },
+    { label: "اتصل بنا", href: "/#contact" }
   ];
 
   const scrollToSection = (href: string) => {
@@ -43,18 +54,45 @@ const HeaderBootstrap = () => {
             {navItems.map((item) => (
               <Link
                 key={item.href}
-                onClick={() => scrollToSection(item.href)}
                 to={item.href}
+                onClick={() => scrollToSection(item.href)}
                 className="btn btn-link nav-link-custom text-decoration-none"
               >
                 {item.label}
               </Link>
             ))}
+            {isAuthenticated && role === 'Admin' && (
+              <Link
+                key="/dashboard"
+                to="/dashboard"
+                onClick={() => navigate('/dashboard')}
+                className="btn btn-link nav-link-custom text-decoration-none"
+              >
+                لوحة التحكم
+              </Link>
+            )}
+            {isAuthenticated && (
+              <Link
+                to="/"
+                onClick={() => handleLogout()}
+                className="btn btn-link nav-link-custom text-decoration-none"
+              >
+                تسجيل الخروج
+              </Link>
+            )}
+            {!isAuthenticated && (
+              <Link
+                to="/login"
+                className="btn btn-link nav-link-custom text-decoration-none"
+              >
+                تسجيل دخول
+              </Link>
+            )}
             <button
-              onClick={() => scrollToSection("#ebook")}
+              onClick={() => navigate('/book')}
               className="btn btn-primary-custom px-4"
             >
-              احصل على الكتاب
+              عرض الكتاب
             </button>
           </div>
 

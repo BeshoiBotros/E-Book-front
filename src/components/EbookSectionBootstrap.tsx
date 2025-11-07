@@ -1,20 +1,16 @@
-import { Download, BookOpen, CheckCircle } from 'lucide-react';
-import { toast } from 'sonner';
+import { Eye, BookOpen } from 'lucide-react';
+import { useNavigate } from 'react-router';
 
 const EbookSectionBootstrap = () => {
-  const handleDownload = () => {
-    toast.success('شكراً لاهتمامك! سيتم إرسال رابط التحميل إلى بريدك الإلكتروني قريباً.', {
-      duration: 5000,
-    });
-  };
+  const navigate = useNavigate();
 
-  const ebookFeatures = [
-    'دليل شامل لحقوق الإنسان في النظام القضائي',
-    'شرح مفصل للإجراءات الجنائية',
-    'أمثلة عملية من الخبرة القضائية',
-    'نصائح قانونية للأفراد والمؤسسات',
-    'تحليل للمواثيق الدولية وتطبيقاتها',
-  ];
+  // const ebookFeatures = [
+  //   'دليل شامل لحقوق الإنسان في النظام القضائي',
+  //   'شرح مفصل للإجراءات الجنائية',
+  //   'أمثلة عملية من الخبرة القضائية',
+  //   'نصائح قانونية للأفراد والمؤسسات',
+  //   'تحليل للمواثيق الدولية وتطبيقاتها',
+  // ];
 
   return (
     <section id="ebook" className="py-5 bg-gradient-card ebook-section">
@@ -36,30 +32,38 @@ const EbookSectionBootstrap = () => {
                     </div>
 
                     <h2 className="display-5 fw-bold mb-3 text-primary-custom">
-                      احصل على كتابك
-                      <span className="d-block text-primary-custom mt-2">الإلكتروني</span>
+                      احصل على نسختك
+                      <span className="d-block text-primary-custom mt-2">الإلكترونية</span>
                     </h2>
 
                     <p className="fs-5 text-muted-custom mb-4 lh-base">
-                      دليلك الشامل لفهم القانون الجنائي وحقوق الإنسان من خلال خبرة قضائية تمتد لأكثر من 40 عاماً
+                      كتاب «الوافي في نظام الإجراءات الجزائية السعودي» ثمرةَ جهدٍ علميٍّ مُخلص، يهدف إلى تيسير فهم نصوص النظام، وبيان أحكامه، واستجلاء دلالاته، وربطها بالفقه الإسلامي وأصول العدالة الراسخة. وهو موجَّهٌ إلى: رجال الضبط الجنائي، أصحاب الفضيلة أعضاء النيابة العامة وأعضاء هيئة الرقابة ومكافحة الفساد والقضاة، المحامون، أساتذة الجامعات بكليات القانون والشريعة، طلاب هذه الكليات، وطلاب الدراسات العليا، والباحثين في المجال الجزائي.
                     </p>
 
-                    <div className="mb-4">
+                    {/* <div className="mb-4">
                       {ebookFeatures.map((feature, index) => (
                         <div key={index} className="d-flex align-items-start gap-3 mb-3">
                           <CheckCircle className="text-primary-custom mt-1" size={20} style={{ flexShrink: 0 }} />
                           <p className="mb-0">{feature}</p>
                         </div>
                       ))}
-                    </div>
-
+                    </div> */}
+                  <div className='d-flex gap-3'>
                     <button
-                      onClick={handleDownload}
+                      onClick={()=>navigate('/book')}
                       className="btn btn-primary-custom btn-lg fs-5 fw-bold w-100 w-md-auto mb-3"
                     >
-                      <Download className="ms-2" size={24} />
-                      احصل علي الكتاب الآن
+                      {/* <Eye className="ms-2" size={24} /> */}
+                      عرض مقدمة الكتاب
                     </button>
+                    <button
+                      onClick={()=>navigate('/book')}
+                      className="btn btn-primary-custom btn-lg fs-5 fw-bold w-100 w-md-auto mb-3"
+                    >
+                      {/* <Eye className="ms-2" size={24} /> */}
+                      الفهرس
+                    </button>
+                  </div>
 
                     <p className="small text-muted-custom">
                     </p>
@@ -81,13 +85,13 @@ const EbookSectionBootstrap = () => {
                             <p className="small text-muted-custom">قاضي ودكتور في القانون الجنائي</p>
                           </div> */}
                         </div>
-                          <img className='img' src="/src/assets/8olaf.jpeg" alt="" />
+                        <img className='img' src="/src/assets/book-cover.jpg" alt="" />
                       </div>
                     </div>
 
                     {/* Floating Stats */}
-                    <div className="position-absolute bg-primary-custom text-white rounded-circle d-flex align-items-center justify-content-center shadow-lg" 
-                         style={{ top: '5px', left: '5px', width: '80px', height: '80px' }}>
+                    <div className="position-absolute bg-primary-custom text-white rounded-circle d-flex align-items-center justify-content-center shadow-lg"
+                      style={{ top: '5px', left: '5px', width: '80px', height: '80px' }}>
                       <div className="text-center">
                         <p className="fs-4 fw-bold mb-0">600+</p>
                         <p className="small mb-0">صفحة</p>

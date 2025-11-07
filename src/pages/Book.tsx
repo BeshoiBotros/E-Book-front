@@ -1,8 +1,5 @@
 // ...existing code...
 import type React from "react";
-import AuthHeader from "../components/AuthHeader";
-import Cookies from "js-cookie";
-import { Navigate } from "react-router";
 import HTMLFlipBook from "react-pageflip";
 import { Container, Row, Spinner } from "react-bootstrap";
 import axios from "axios";
@@ -11,6 +8,7 @@ import { useInfiniteQuery } from "@tanstack/react-query";
 import { BASE_API_URL } from "../api/main";
 import { getTokenFromCookies } from "../api/auth";
 import "../styles/book.css";
+import HeaderBootstrap from "../components/HeaderBootstrap";
 
 const PAGES_PER_FETCH = 10; // chunk size
 
@@ -173,7 +171,6 @@ const customStyles = `
 `;
 
 const Book: React.FC = () => {
-  if (!Cookies.get("access")) return <Navigate to="/login" />;
 
   const [dimensions, setDimensions] = useState({ width: 400, height: 550 });
   const [isMobile, setIsMobile] = useState(false);
@@ -214,10 +211,13 @@ const Book: React.FC = () => {
     return () => window.removeEventListener("resize", updateDimensions);
   }, []);
 
-  const fetchPages = async ({ pageParam = 1 }) => {
+  const fetchPages = async () => {
     const res = await axios.get(`${BASE_API_URL}/book/page/`, {
-      params: { start: pageParam, end: pageParam + PAGES_PER_FETCH - 1 },
-      headers: { Authorization: `Bearer ${getTokenFromCookies()}` },
+      headers: { 'Content-Type': 'application/json',
+         'Authorization': `Bearer ${getTokenFromCookies()}` },
+         params: {
+          
+         }
     });
 
     const raw = res.data;
@@ -308,7 +308,7 @@ const Book: React.FC = () => {
   return (
     <>
       <style>{customStyles}</style>
-      <AuthHeader />
+      <HeaderBootstrap />
 
       {isPreloading && (
         <div style={styles.loadingOverlay}>

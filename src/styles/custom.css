@@ -427,7 +427,12 @@ html {
   line-height: 1.7;
   opacity: 1;
 }
-
+.hero-header {
+  font-size: 28px;
+}
+.hero-subheading{
+  font-size: 22px;
+}
 /* Stat Card */
 .stat-card {
   background-color: rgba(46, 30, 15, 0.6);

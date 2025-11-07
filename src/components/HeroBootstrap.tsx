@@ -27,14 +27,28 @@ const HeroBootstrap = () => {
 
             {/* Main Heading */}
             <h1 className="display-2 fw-bold mb-4 lh-sm">
-              شريكك القانوني
-              <span className="d-block text-primary-custom mt-2">الموثوق</span>
+              المستشار الدكتور / خيرى أحمد الكباش
+              <span className="d-block text-primary-custom mt-2 hero-header">أكثر من أربعة عقود فى خدمة العدالة, والفكر القانونى, واللإصلاح التشريعى.</span>
             </h1>
 
             {/* Subheading */}
-            <p className="fs-4 text-muted-custom mb-4 lh-base">
-              القاضي الدكتور خيري الكباش - خبرة تمتد لعقود في القضاء والقانون الجنائي
-              وحقوق الإنسان
+            <p className="fs-4 text-muted-custom mb-4 lh-base hero-subheading">
+              رئيس الاستئناف
+              <br />
+              الأمين العام السابق للّجنة العُليا للإصلاح التشريعي
+              <br />
+              الأمين العام للجمعية المصرية للطب والقانون
+              <br />
+              عُضو مجلس إدارة الجمعية المصرية للقانون الجنائي
+              <br />
+              رئيس نيابة العاصمة بالكويت سابقاً
+              <br />
+              رئيس الدائرة الاستئنافية الجزائية بأبو ظبي سابقاً
+              <br />
+              عُضو الهيئة العلمية لأكاديمية أبو ظبي القضائية سابقاً
+              <br />
+              رئيس لجنة السياسات والتشريعات في الاتحاد العربي للاقتصاد الرقمي
+
             </p>
 
             {/* Key Points */}
@@ -42,19 +56,19 @@ const HeroBootstrap = () => {
               <div className="col-md-4">
                 <div className="stat-card">
                   <p className="display-6 fw-bold text-primary-custom mb-1">+40</p>
-                  <p className="small text-muted-custom">عاماً من الخبرة</p>
+                  <p className="small text-muted-custom"> عاماً من الخبرة القانونية</p>
                 </div>
               </div>
               <div className="col-md-4">
                 <div className="stat-card">
-                  <p className="display-6 fw-bold text-primary-custom mb-1">+100</p>
-                  <p className="small text-muted-custom">بحث ودراسة قانونية</p>
+                  <p className="display-6 fw-bold text-primary-custom mb-1">+60</p>
+                  <p className="small text-muted-custom">نشاطا قانونيا وقضائيا</p>
                 </div>
               </div>
               <div className="col-md-4">
                 <div className="stat-card">
-                  <p className="display-6 fw-bold text-primary-custom mb-1">دولي</p>
-                  <p className="small text-muted-custom">خبرة قضائية عربية</p>
+                  <p className="display-6 fw-bold text-primary-custom mb-1">+10</p>
+                  <p className="small text-muted-custom">مؤلفات علمية</p>
                 </div>
               </div>
             </div>
