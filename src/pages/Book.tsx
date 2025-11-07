@@ -215,9 +215,6 @@ const Book: React.FC = () => {
     const res = await axios.get(`${BASE_API_URL}/book/page/`, {
       headers: { 'Content-Type': 'application/json',
          'Authorization': `Bearer ${getTokenFromCookies()}` },
-         params: {
-          
-         }
     });
 
     const raw = res.data;
@@ -237,27 +234,15 @@ const Book: React.FC = () => {
         raw.total_pages ?? raw.total ?? raw.count ?? pagesArray.length ?? 0;
     }
 
-    if (pagesArray.length === 0) {
-      console.warn(
-        `Empty pages returned for range ${pageParam}-${
-          pageParam + PAGES_PER_FETCH - 1
-        }, total_pages: ${total_pages}`
-      );
-    }
-
     return { pages: pagesArray, total_pages };
   };
 
-  const { data, fetchNextPage, hasNextPage, isFetchingNextPage, error } =
+  const { data, fetchNextPage, hasNextPage, isFetchingNextPage } =
     useInfiniteQuery({
       queryKey: ["book-cache"],
       queryFn: fetchPages,
       initialPageParam: 1,
       getNextPageParam: (lastPage, allPages) => {
-        if ((lastPage.pages?.length ?? 0) === 0) {
-          return undefined;
-        }
-
         const loadedCount = allPages.reduce(
           (acc, g) => acc + (g.pages?.length ?? 0),
           0
@@ -268,7 +253,6 @@ const Book: React.FC = () => {
           : undefined;
       },
       staleTime: Infinity,
-      gcTime: Infinity, // Optimization: Persist cache indefinitely (no garbage collection)
     });
 
   const pages = data?.pages?.flatMap((g) => g.pages) ?? [];
@@ -276,18 +260,16 @@ const Book: React.FC = () => {
 
   useEffect(() => {
     if (!totalPages) return;
-
-    if (pages.length >= totalPages || !hasNextPage) {
+    if (pages.length >= totalPages) {
       if (isPreloading) {
         setIsPreloading(false);
         setCurrentPage(0);
         try {
           bookRef.current?.pageFlip()?.turnToPage(0);
-
+        } catch (e) { }
       }
       return;
     }
-
     if (hasNextPage && !isFetchingNextPage) {
       fetchNextPage();
     }
@@ -299,10 +281,6 @@ const Book: React.FC = () => {
     fetchNextPage,
     isPreloading,
   ]);
-  
-  useEffect(() => {
-    console.log(data);
-  }, [data]);
 
   const handleFlip = (e: any) => {
     setCurrentPage(e?.data ?? 0);
@@ -320,7 +298,7 @@ const Book: React.FC = () => {
     setPageInput("");
   };
 
-  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+  const handleKeyPress = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === "Enter") handlePageJump();
   };
 
@@ -340,7 +318,7 @@ const Book: React.FC = () => {
         </div>
       )}
 
-
+      {/* --- Book Container --- */}
       <div
         style={{
           ...styles.background,
@@ -348,7 +326,6 @@ const Book: React.FC = () => {
           marginTop: "50px",
         }}
       >
-
         <Row>
           <Container style={styles.container}>
             <div style={styles.bookWrapper}>
@@ -360,7 +337,7 @@ const Book: React.FC = () => {
                   max={totalPages || 1}
                   value={pageInput}
                   onChange={(e) => setPageInput(e.target.value)}
-                  onKeyDown={handleKeyDown}
+                  onKeyPress={handleKeyPress}
                   placeholder={`1-${totalPages || "..."}`}
                   style={styles.pageJumpInput}
                 />
@@ -368,24 +345,6 @@ const Book: React.FC = () => {
                   onClick={handlePageJump}
                   style={styles.pageJumpButton}
                   onMouseEnter={(e) => {
-
-                    (
-                      e.currentTarget as HTMLButtonElement
-                    ).style.backgroundColor = "#D4A053";
-                    (e.currentTarget as HTMLButtonElement).style.transform =
-                      "translateY(-2px)";
-                    (e.currentTarget as HTMLButtonElement).style.boxShadow =
-                      "0 4px 12px rgba(184, 138, 68, 0.4)";
-                  }}
-                  onMouseLeave={(e) => {
-                    (
-                      e.currentTarget as HTMLButtonElement
-                    ).style.backgroundColor = "#B88A44";
-                    (e.currentTarget as HTMLButtonElement).style.transform =
-                      "translateY(0)";
-                    (e.currentTarget as HTMLButtonElement).style.boxShadow =
-                      "none";
-
                     const btn = e.currentTarget as HTMLButtonElement;
                     btn.style.backgroundColor = "#D4A053";
                     btn.style.transform = "translateY(-2px)";
@@ -397,7 +356,6 @@ const Book: React.FC = () => {
                     btn.style.backgroundColor = "#B88A44";
                     btn.style.transform = "translateY(0)";
                     btn.style.boxShadow = "none";
-
                   }}
                 >
                   اذهب
@@ -477,4 +435,4 @@ const Book: React.FC = () => {
 };
 
 export default Book;
-
+// ...existing code...
