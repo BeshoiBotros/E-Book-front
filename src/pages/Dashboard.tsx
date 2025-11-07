@@ -14,6 +14,7 @@ import { useMutation } from "@tanstack/react-query";
 import Cookies from "js-cookie";
 import { useNavigate } from "react-router";
 import HeaderBootstrap from "../components/HeaderBootstrap";
+import { useQueryClient } from "@tanstack/react-query";
 
 const Dashboard: React.FC = () => {
   const navigate = useNavigate();
@@ -59,10 +60,12 @@ const Dashboard: React.FC = () => {
     }
   }, [role]);
 
+  const queryClient = useQueryClient();
+
   const createUserMutation = useMutation({
     mutationFn: createUser,
-    onSuccess: (data) => {
-      setUsers([...users, data]);
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["users"] });
       Swal.fire({
         title: "تم اضافة المستخدم",
         icon: "success",
@@ -70,25 +73,7 @@ const Dashboard: React.FC = () => {
         showConfirmButton: false,
       });
     },
-    onError: (error: any) => {
-      const errors = error.response?.data;
-      if (!errors) {
-        Swal.fire("خطأ", "حدث خطأ ما..", "error");
-        return;
-      }
-      const formattedErrors = Object.entries(errors)
-        .map(
-          ([field, messages]) =>
-            `<b>${field}</b>: ${(messages as string[]).join(", ")}`
-        )
-        .join("<br>");
-
-      Swal.fire({
-        icon: "error",
-        title: "Oops...",
-        html: formattedErrors,
-      });
-    },
+    // ... rest of the options, remove the setUsers line
   });
 
   const updateUserMutation = useMutation({
@@ -112,8 +97,8 @@ const Dashboard: React.FC = () => {
         html: formattedErrors,
       });
     },
-    onSuccess: (data) => {
-      setUsers((prev) => prev.map((u) => (u.id === data.id ? data : u)));
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["users"] });
       Swal.fire({
         title: "تم التعديل بنجاح",
         icon: "success",
@@ -204,7 +189,7 @@ const Dashboard: React.FC = () => {
     <>
       <HeaderBootstrap />
 
-      <main className="" style={{marginTop: '50px'}}>
+      <main className="" style={{ marginTop: "50px" }}>
         <Container fluid className="">
           <StatisticsCards users={users} />
           <UsersTable

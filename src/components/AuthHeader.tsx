@@ -1,12 +1,11 @@
-
-import { NavLink, useNavigate } from 'react-router';
+import { useNavigate } from 'react-router-dom'; // Fix import to 'react-router-dom'
 import Cookies from "js-cookie";
 import { useState, useEffect } from 'react';
 import { Menu, X } from 'lucide-react';
-import { Link } from 'react-router-dom';
+import { Link } from 'react-router-dom'; // Consistent import
 
 const AuthHeader = () => {
-  const navigate=useNavigate();
+  const navigate = useNavigate();
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
@@ -32,14 +31,26 @@ const AuthHeader = () => {
       setIsMobileMenuOpen(false);
     }
   };
-  const handleLogout = () =>{
+
+  const handleLogout = () => {
     Cookies.remove('access');
     Cookies.remove('role')
     navigate("/login");
-  } 
+  };
+
+  const handleNavClick = (e: React.MouseEvent<HTMLAnchorElement>, item: typeof navItems[0]) => {
+    if (item.href === '/login') {
+      e.preventDefault(); // Prevent default Link navigation for logout
+      handleLogout();
+    } else if (item.href.startsWith('#')) { // Only scroll if it's an anchor (fix mixed logic)
+      e.preventDefault();
+      scrollToSection(item.href);
+    }
+    // Otherwise, let <Link> handle route navigation
+  };
 
   return (
-    <header className={` ${isScrolled ? 'scrolled' : ''}`} style={{backgroundColor:'#2e1d0f'}}>
+    <header className={`${isScrolled ? 'scrolled' : ''}`} style={{ backgroundColor: '#2e1d0f' }}>
       <nav className="container py-3">
         <div className="d-flex align-items-center justify-content-between">
           {/* Logo/Name */}
@@ -52,7 +63,7 @@ const AuthHeader = () => {
             {navItems.map((item) => (
               <Link
                 key={item.href}
-                onClick={() => item.href === '/login' ? handleLogout() : scrollToSection(item.href)}
+                onClick={(e) => handleNavClick(e, item)}
                 to={item.href}
                 className="btn btn-link nav-link-custom text-decoration-none"
               >
@@ -82,9 +93,9 @@ const AuthHeader = () => {
             <div className="d-flex flex-column gap-3">
               {navItems.map((item) => (
                 <Link
-                //   key={item.href}
+                  key={item.href}
+                  onClick={(e) => handleNavClick(e, item)} // Add consistent onClick
                   to={item.href}
-                //   onClick={() => scrollToSection(item.href)}
                   className="btn btn-link nav-link-custom text-decoration-none text-end"
                 >
                   {item.label}
