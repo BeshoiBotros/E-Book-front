@@ -14,7 +14,6 @@ interface UsersTableProps {
 const UsersTable: React.FC<UsersTableProps> = ({
   users,
   onViewUser,
-  onDeleteUser,
   onUpdateUser,
   onAddUser,
 }) => {

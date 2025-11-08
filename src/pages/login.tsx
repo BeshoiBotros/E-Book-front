@@ -6,7 +6,6 @@ import Cookies from "js-cookie";
 import Swal from "sweetalert2";
 import { Navigate, useNavigate } from "react-router";
 import "../styles/login.css";
-import logo from "../assets/hummer2.svg";
 import HeaderBootstrap from "../components/HeaderBootstrap";
 
 const Login: React.FC = () => {

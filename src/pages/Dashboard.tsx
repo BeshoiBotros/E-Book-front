@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import { Container } from "react-bootstrap";
-import AuthHeader from "../components/AuthHeader";
 import StatisticsCards from "../components/StatisticsCard";
 import UsersTable from "../components/UsersTable";
 import CreateUserModal from "../components/CreateUserModal";
@@ -26,7 +25,6 @@ const Dashboard: React.FC = () => {
   const [role, setRole] = useState<string | null>(null);
   const {
     data: allUsers,
-    isLoading,
     isError,
     error,
     isSuccess,

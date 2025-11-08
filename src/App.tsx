@@ -1,7 +1,6 @@
 import { BrowserRouter, Route, Routes } from "react-router";
 import AuthLayout from "./layouts/authLayout";
 import UnAuthLayout from "./layouts/unAuthLayout";
-import Test from "./pages/test";
 import  Login  from "./pages/login";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap/dist/js/bootstrap.bundle.min.js";
