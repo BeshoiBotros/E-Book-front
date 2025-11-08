@@ -417,8 +417,8 @@ const Book: React.FC = () => {
                   onFlip={handleFlip}
                   drawShadow={true}
                   showCover={!isMobile}
-                  minWidth={150}
-                  minHeight={206}
+                  minWidth={400}
+                  minHeight={600}
                   maxHeight={700}
                   flippingTime={800}
                   usePortrait={isMobile}
