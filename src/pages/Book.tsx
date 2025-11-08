@@ -10,8 +10,6 @@ import { getTokenFromCookies } from "../api/auth";
 import "../styles/book.css";
 import HeaderBootstrap from "../components/HeaderBootstrap";
 
-const PAGES_PER_FETCH = 10; // chunk size
-
 const styles = {
   background: {
     backgroundColor: "#1C1A17",
@@ -160,6 +158,19 @@ const styles = {
     transition: "all 0.3s ease",
     whiteSpace: "nowrap" as "nowrap",
   },
+  loadingIndicator: {
+    position: "absolute" as "absolute",
+    bottom: "20px",
+    left: "50%",
+    transform: "translateX(-50%)",
+    padding: "0.5rem 1rem",
+    backgroundColor: "rgba(184, 138, 68, 0.9)",
+    borderRadius: "8px",
+    color: "#F8F5F1",
+    fontSize: "14px",
+    fontWeight: "500" as "500",
+    zIndex: 1000,
+  },
 };
 
 const customStyles = `
@@ -171,12 +182,11 @@ const customStyles = `
 `;
 
 const Book: React.FC = () => {
-
   const [dimensions, setDimensions] = useState({ width: 400, height: 550 });
   const [isMobile, setIsMobile] = useState(false);
   const [pageInput, setPageInput] = useState("");
   const [currentPage, setCurrentPage] = useState(0);
-  const [isPreloading, setIsPreloading] = useState(true);
+  const [isInitialLoading, setIsInitialLoading] = useState(true);
   const bookRef = useRef<any>(null);
 
   useEffect(() => {
@@ -211,90 +221,106 @@ const Book: React.FC = () => {
     return () => window.removeEventListener("resize", updateDimensions);
   }, []);
 
-  const fetchPages = async () => {
-    const res = await axios.get(`${BASE_API_URL}/book/page/`, {
-      headers: { 'Content-Type': 'application/json',
-         'Authorization': `Bearer ${getTokenFromCookies()}` },
-    });
+  const fetchPages = async ({ pageParam = 1 }) => {
+    const token = getTokenFromCookies();
 
-    const raw = res.data;
-    let pagesArray: string[] = [];
-    let total_pages = 0;
+    // Build headers conditionally based on token availability
+    const headers: Record<string, string> = {
+      'Content-Type': 'application/json',
+    };
 
-    if (Array.isArray(raw)) {
-      pagesArray = raw;
-      total_pages = raw.length;
-    } else {
-      pagesArray =
-        raw.pages ??
-        raw.results ??
-        (Array.isArray(raw.data) ? raw.data : []) ??
-        [];
-      total_pages =
-        raw.total_pages ?? raw.total ?? raw.count ?? pagesArray.length ?? 0;
+    if (token) {
+      headers['Authorization'] = `Bearer ${token}`;
     }
 
-    return { pages: pagesArray, total_pages };
+    const res = await axios.get(`${BASE_API_URL}/book/page/`, {
+      params: { page: pageParam },
+      headers,
+    });
+
+    const responseData = res.data;
+
+    return {
+      pages: responseData.results?.pages || [],
+      totalPages: responseData.results?.total_pages || responseData.count || 0,
+      nextPage: responseData.next,
+      isAuthorized: responseData.results?.authorized || false,
+    };
   };
 
-  const { data, fetchNextPage, hasNextPage, isFetchingNextPage } =
-    useInfiniteQuery({
-      queryKey: ["book-cache"],
-      queryFn: fetchPages,
-      initialPageParam: 1,
-      getNextPageParam: (lastPage, allPages) => {
-        const loadedCount = allPages.reduce(
-          (acc, g) => acc + (g.pages?.length ?? 0),
-          0
-        );
-        const nextStart = loadedCount + 1;
-        return nextStart <= (lastPage.total_pages ?? 0)
-          ? nextStart
-          : undefined;
-      },
-      staleTime: Infinity,
-    });
-
-  const pages = data?.pages?.flatMap((g) => g.pages) ?? [];
-  const totalPages = data?.pages?.[0]?.total_pages ?? pages.length ?? 0;
-
-  useEffect(() => {
-    if (!totalPages) return;
-    if (pages.length >= totalPages) {
-      if (isPreloading) {
-        setIsPreloading(false);
-        setCurrentPage(0);
-        try {
-          bookRef.current?.pageFlip()?.turnToPage(0);
-        } catch (e) { }
-      }
-      return;
-    }
-    if (hasNextPage && !isFetchingNextPage) {
-      fetchNextPage();
-    }
-  }, [
-    pages.length,
-    totalPages,
+  const {
+    data,
+    fetchNextPage,
     hasNextPage,
     isFetchingNextPage,
-    fetchNextPage,
-    isPreloading,
-  ]);
+    isLoading,
+  } = useInfiniteQuery({
+    queryKey: ["book-pages"],
+    queryFn: fetchPages,
+    initialPageParam: 1,
+    getNextPageParam: (lastPage, allPages) => {
+      // If there's a next URL, increment page number
+      if (lastPage.nextPage) {
+        return allPages.length + 1;
+      }
+      return undefined;
+    },
+    staleTime: Infinity,
+    gcTime: Infinity, // Keep cached data indefinitely
+  });
 
+  // Flatten all pages from all fetched chunks
+  const allPages = data?.pages?.flatMap((page) => page.pages) || [];
+  const totalPages = data?.pages?.[0]?.totalPages || 0;
+  const isAuthorized = data?.pages?.[0]?.isAuthorized || false;
+
+  // Hide initial loading overlay once first data is loaded
+  useEffect(() => {
+    if (!isLoading && allPages.length > 0 && isInitialLoading) {
+      setIsInitialLoading(false);
+    }
+  }, [isLoading, allPages.length, isInitialLoading]);
+
+  // Auto-fetch next page when user approaches the end
   const handleFlip = (e: any) => {
-    setCurrentPage(e?.data ?? 0);
+    const newPage = e?.data ?? 0;
+    setCurrentPage(newPage);
+
+    // Trigger next page fetch when user is near the end of loaded pages
+    const loadedPagesCount = allPages.length;
+    const threshold = Math.max(3, Math.floor(loadedPagesCount * 0.1)); // Load when 90% through or 3 pages from end
+
+    if (
+      newPage >= loadedPagesCount - threshold &&
+      hasNextPage &&
+      !isFetchingNextPage
+    ) {
+      fetchNextPage();
+    }
   };
 
   const handlePageJump = () => {
     const pageNumber = parseInt(pageInput, 10);
     if (isNaN(pageNumber) || pageNumber < 1 || pageNumber > totalPages) {
-      alert(`Please enter a valid page number between 1 and ${totalPages}.`);
+      alert(`الرجاء إدخال رقم صفحة صحيح بين 1 و ${totalPages}.`);
       return;
     }
     const targetPage = pageNumber - 1;
-    bookRef.current?.pageFlip()?.turnToPage(targetPage);
-    setCurrentPage(targetPage);
+
+    // Check if we need to load more pages to reach the target
+    if (targetPage >= allPages.length && hasNextPage && !isFetchingNextPage) {
+      // Load more pages then jump
+      fetchNextPage().then(() => {
+        setTimeout(() => {
+          bookRef.current?.pageFlip()?.turnToPage(targetPage);
+          setCurrentPage(targetPage);
+        }, 100);
+      });
+    } else {
+      bookRef.current?.pageFlip()?.turnToPage(targetPage);
+      setCurrentPage(targetPage);
+    }
+
     setPageInput("");
   };
 
@@ -307,12 +333,12 @@ const Book: React.FC = () => {
       <style>{customStyles}</style>
       <HeaderBootstrap />
 
-      {isPreloading && (
+      {isInitialLoading && (
         <div style={styles.loadingOverlay}>
           <div style={styles.loadingContent}>
             <Spinner animation="border" style={styles.spinner} />
             <span style={styles.loadingText}>
-              جار تحضير كتابك... {pages.length} / {totalPages || "..."}
+              جار تحضير كتابك...
             </span>
           </div>
         </div>
@@ -322,13 +348,30 @@ const Book: React.FC = () => {
       <div
         style={{
           ...styles.background,
-          visibility: isPreloading ? "hidden" : "visible",
+          visibility: isInitialLoading ? "hidden" : "visible",
           marginTop: "50px",
         }}
       >
         <Row>
           <Container style={styles.container}>
             <div style={styles.bookWrapper}>
+              {!isAuthorized && totalPages > allPages.length && (
+                <div
+                  style={{
+                    padding: "0.75rem 1.25rem",
+                    backgroundColor: "rgba(184, 138, 68, 0.15)",
+                    borderRadius: "8px",
+                    border: "1px solid rgba(184, 138, 68, 0.4)",
+                    color: "#B7AFA5",
+                    fontSize: "14px",
+                    textAlign: "center",
+                    marginBottom: "1rem",
+                  }}
+                >
+                  أنت تشاهد النسخة المجانية. قم بتسجيل الدخول للوصول إلى الكتاب الكامل.
+                </div>
+              )}
+
               <div style={styles.pageJumpContainer}>
                 <span style={styles.pageJumpLabel}>اذهب إلى صفحة:</span>
                 <input
@@ -348,8 +391,7 @@ const Book: React.FC = () => {
                     const btn = e.currentTarget as HTMLButtonElement;
                     btn.style.backgroundColor = "#D4A053";
                     btn.style.transform = "translateY(-2px)";
-                    btn.style.boxShadow =
-                      "0 4px 12px rgba(184, 138, 68, 0.4)";
+                    btn.style.boxShadow = "0 4px 12px rgba(184, 138, 68, 0.4)";
                   }}
                   onMouseLeave={(e) => {
                     const btn = e.currentTarget as HTMLButtonElement;
@@ -362,53 +404,61 @@ const Book: React.FC = () => {
                 </button>
               </div>
 
-              <HTMLFlipBook
-                ref={bookRef}
-                style={styles.flipBook}
-                width={dimensions.width}
-                height={dimensions.height}
-                startPage={currentPage}
-                maxWidth={dimensions.width}
-                size="stretch"
-                className="custom-flip-book rtl-book"
-                onFlip={handleFlip}
-                drawShadow={true}
-                showCover={!isMobile}
-                minWidth={150}
-                minHeight={206}
-                maxHeight={700}
-                flippingTime={800}
-                usePortrait={isMobile}
-                startZIndex={0}
-                autoSize={true}
-                maxShadowOpacity={0.8}
-                mobileScrollSupport={true}
-                clickEventForward={true}
-                useMouseEvents={true}
-                swipeDistance={30}
-                showPageCorners={true}
-                disableFlipByClick={false}
-              >
-                {pages.map((src, i) => (
-                  <div key={i} className="page">
-                    <div
-                      style={{
-                        ...styles.pageContent,
-                        direction: "rtl",
-                        textAlign: "right",
-                      }}
-                    >
-                      <img
-                        src={src}
-                        alt={`page ${i + 1}`}
-                        style={styles.pageImage}
-                        loading="lazy"
-                      />
-                      <div style={styles.pageNumber}>{i + 1}</div>
+              <div style={{ position: "relative" }}>
+                <HTMLFlipBook
+                  ref={bookRef}
+                  style={styles.flipBook}
+                  width={dimensions.width}
+                  height={dimensions.height}
+                  startPage={currentPage}
+                  maxWidth={dimensions.width}
+                  size="stretch"
+                  className="custom-flip-book rtl-book"
+                  onFlip={handleFlip}
+                  drawShadow={true}
+                  showCover={!isMobile}
+                  minWidth={150}
+                  minHeight={206}
+                  maxHeight={700}
+                  flippingTime={800}
+                  usePortrait={isMobile}
+                  startZIndex={0}
+                  autoSize={true}
+                  maxShadowOpacity={0.8}
+                  mobileScrollSupport={true}
+                  clickEventForward={true}
+                  useMouseEvents={true}
+                  swipeDistance={30}
+                  showPageCorners={true}
+                  disableFlipByClick={false}
+                >
+                  {allPages.map((src, i) => (
+                    <div key={i} className="page">
+                      <div
+                        style={{
+                          ...styles.pageContent,
+                          direction: "rtl",
+                          textAlign: "right",
+                        }}
+                      >
+                        <img
+                          src={src}
+                          alt={`page ${i + 1}`}
+                          style={styles.pageImage}
+                          loading="lazy"
+                        />
+                        <div style={styles.pageNumber}>{i + 1}</div>
+                      </div>
                     </div>
+                  ))}
+                </HTMLFlipBook>
+
+                {isFetchingNextPage && (
+                  <div style={styles.loadingIndicator}>
+                    جار تحميل المزيد من الصفحات...
                   </div>
-                ))}
-              </HTMLFlipBook>
+                )}
+              </div>
 
               <div style={styles.progressContainer}>
                 <div style={styles.progressBar}>
@@ -424,6 +474,7 @@ const Book: React.FC = () => {
                 </div>
                 <span style={styles.progressText}>
                   صفحة {currentPage + 1} من {totalPages || "..."}
+                  {allPages.length < totalPages && ` (محملة: ${allPages.length})`}
                 </span>
               </div>
             </div>

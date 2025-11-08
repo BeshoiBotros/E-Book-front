@@ -10,4 +10,22 @@ export default defineConfig({
       },
     }),
   ],
+  server: {
+    proxy: {
+      '/proxy-api': {
+        target: 'https://turism.smartsminds.com',
+        changeOrigin: true,
+        rewrite: (path) => path.replace(/^\/proxy-api/, ''),
+        configure: (proxy) => {
+          proxy.on('proxyReq', (proxyReq, req) => {
+            proxyReq.removeHeader('referer');  // Remove Referer to avoid backend checks
+            proxyReq.removeHeader('origin');   // Optional: Remove Origin if backend rejects it
+            if (req.headers.cookie) {
+              proxyReq.setHeader('Cookie', req.headers.cookie);
+            }
+          });
+        },
+      },
+    },
+  },
 })
