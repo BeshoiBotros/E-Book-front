@@ -12,22 +12,22 @@ import { createSyncStoragePersister } from '@tanstack/query-sync-storage-persist
 const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
-      gcTime: 1000 * 60 * 60 * 24,
-      staleTime: Infinity,
+      gcTime: 0,
+      staleTime: 0,
     },
   },
 });
 
 const persister = createSyncStoragePersister({
-  storage: window.localStorage, // or sessionStorage
-  key: 'book-cache',
+  storage: window.localStorage, 
+  // key: 'book-cache',
 });
 
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
-    <PersistQueryClientProvider client={queryClient} persistOptions={{ persister }}>
+    <QueryClientProvider client={queryClient}>
       <App />
-    </PersistQueryClientProvider>
+    </QueryClientProvider>
   </StrictMode>
 );
