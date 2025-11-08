@@ -3,7 +3,9 @@ import { createRoot } from "react-dom/client";
 import App from "./App.tsx";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import "./styles/index.css";
+import axios from 'axios';
 
+axios.defaults.withCredentials = true; 
 
 const queryClient = new QueryClient({
   defaultOptions: {

@@ -6,35 +6,42 @@
   /* Primary Gold Colors */
   --color-primary: #B88A44;
   --color-primary-hover: #9C7338;
-  --primary-color: hsl(35, 52%, 49%); /* #B88A44 in HSL */
-  --primary-hover: hsl(35, 47%, 41%); /* #9C7338 in HSL */
-  
+  --primary-color: hsl(35, 52%, 49%);
+  /* #B88A44 in HSL */
+  --primary-hover: hsl(35, 47%, 41%);
+  /* #9C7338 in HSL */
+
   /* Background Colors */
   --color-bg-dark: #1C1A17;
-  --background-dark: hsl(25, 12%, 10%); /* #1C1A17 in HSL */
+  --background-dark: hsl(25, 12%, 10%);
+  /* #1C1A17 in HSL */
   --color-accent-dark: #2E1E0F;
-  --card-bg: hsl(25, 28%, 12%); /* #2E1E0F in HSL */
-  
+  --card-bg: hsl(25, 28%, 12%);
+  /* #2E1E0F in HSL */
+
   /* Text Colors - Enhanced for better readability */
   --color-text-light: #F8F5F1;
-  --foreground-light: hsl(35, 25%, 96%); /* #F8F5F1 in HSL */
-  --color-muted: #D4CEC4; /* Lighter muted color for better contrast */
-  --muted-foreground: hsl(30, 14%, 78%); /* Lighter version */
-  
+  --foreground-light: hsl(35, 25%, 96%);
+  /* #F8F5F1 in HSL */
+  --color-muted: #D4CEC4;
+  /* Lighter muted color for better contrast */
+  --muted-foreground: hsl(30, 14%, 78%);
+  /* Lighter version */
+
   /* Border & Effects */
   --border-color: rgba(184, 138, 68, 0.2);
   --gold-shadow: 0 0 40px rgba(184, 138, 68, 0.4);
   --gold-glow: 0 10px 50px -10px rgba(184, 138, 68, 0.5);
-  
+
   /* Gradients */
   --gradient-primary: linear-gradient(135deg, #B88A44, #9C7338);
   --gradient-dark: linear-gradient(180deg, #1C1A17, #2E1E0F);
   --gradient-overlay: linear-gradient(to left, rgba(28, 26, 23, 0.95), rgba(28, 26, 23, 0.9), rgba(28, 26, 23, 0.7));
-  
+
   /* Transitions */
   --transition-smooth: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
   --transition-fast: all 0.3s ease;
-  
+
   /* Radius */
   --radius: 0.75rem;
 }
@@ -75,6 +82,7 @@ html {
   from {
     opacity: 0;
   }
+
   to {
     opacity: 1;
   }
@@ -85,6 +93,7 @@ html {
     opacity: 0;
     transform: translateY(30px);
   }
+
   to {
     opacity: 1;
     transform: translateY(0);
@@ -96,6 +105,7 @@ html {
     opacity: 0;
     transform: translateX(-30px);
   }
+
   to {
     opacity: 1;
     transform: translateX(0);
@@ -107,6 +117,7 @@ html {
     opacity: 0;
     transform: scale(0.9);
   }
+
   to {
     opacity: 1;
     transform: scale(1);
@@ -117,15 +128,19 @@ html {
   0% {
     background-position: -1000px 0;
   }
+
   100% {
     background-position: 1000px 0;
   }
 }
 
 @keyframes pulse {
-  0%, 100% {
+
+  0%,
+  100% {
     opacity: 1;
   }
+
   50% {
     opacity: 0.7;
   }
@@ -427,12 +442,15 @@ html {
   line-height: 1.7;
   opacity: 1;
 }
+
 .hero-header {
   font-size: 28px;
 }
-.hero-subheading{
+
+.hero-subheading {
   font-size: 22px;
 }
+
 /* Stat Card */
 .stat-card {
   background-color: rgba(46, 30, 15, 0.6);
@@ -569,6 +587,13 @@ html {
   font-size: 1.125rem;
   opacity: 0.95;
   margin-bottom: 0.75rem;
+  a{
+    color:var(--color-text-light);
+    text-decoration: none;
+    &:hover{
+      color:var(--color-primary)
+    }
+  }
 }
 
 .about-card ul {
@@ -867,7 +892,7 @@ footer .text-primary-custom {
   .hero-title {
     font-size: 3.5rem;
   }
-  
+
   .section-title {
     font-size: 2.5rem;
   }
@@ -877,15 +902,15 @@ footer .text-primary-custom {
   .hero-title {
     font-size: 3rem;
   }
-  
+
   .section-title {
     font-size: 2rem;
   }
-  
+
   .stat-number {
     font-size: 2.5rem;
   }
-  
+
   p {
     font-size: 1rem;
   }
@@ -895,35 +920,37 @@ footer .text-primary-custom {
   .hero-section {
     padding-top: 100px;
   }
-  
+
   .hero-title {
     font-size: 2.5rem;
   }
-  
+
   .hero-subtitle {
     font-size: 1.25rem;
   }
-  
+
   .section-title {
     font-size: 1.75rem;
   }
-  
+
   .stat-number {
     font-size: 2rem;
   }
-  
+
   .btn-primary-custom,
   .btn-outline-custom {
     padding: 0.75rem 1.5rem;
     font-size: 1rem;
   }
-  
+
   .service-card,
   .about-card,
   .contact-card {
     padding: 1.5rem;
   }
-  
+
+
+
   p {
     font-size: 1rem;
   }
@@ -933,19 +960,19 @@ footer .text-primary-custom {
   .hero-title {
     font-size: 2rem;
   }
-  
+
   .hero-subtitle {
     font-size: 1.125rem;
   }
-  
+
   .section-title {
     font-size: 1.5rem;
   }
-  
+
   .nav-link-custom {
     font-size: 1rem;
   }
-  
+
   p {
     font-size: 0.95rem;
   }
@@ -1009,4 +1036,3 @@ footer .text-primary-custom {
   background-color: var(--color-primary);
   color: var(--color-bg-dark);
 }
-

@@ -236,6 +236,7 @@ const Book: React.FC = () => {
     const res = await axios.get(`${BASE_API_URL}/book/page/`, {
       params: { page: pageParam },
       headers,
+      withCredentials: true,  // Add this
     });
 
     const responseData = res.data;
