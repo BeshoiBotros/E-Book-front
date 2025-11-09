@@ -24,3 +24,31 @@ export const loginUser = async (data: LoginData): Promise<TokenResponse> => {
 export const getTokenFromCookies = (): string | undefined => {
   return Cookies.get("access");
 };
+
+import  { AxiosHeaders } from 'axios';  // Add AxiosHeaders import
+
+// Create an Axios instance (optional, but recommended for managing configurations)
+export const axiosInstance = axios.create({
+  baseURL: 'https://turism.smartsminds.com',
+});
+
+// Add a request interceptor
+axiosInstance.interceptors.request.use(
+  async (config) => {
+    const token = await getTokenFromCookies();
+
+    if (token) {
+      // Initialize headers if undefined
+      if (!config.headers) {
+        config.headers = new AxiosHeaders();
+      }
+      // Use .set() to add the Bearer token
+      config.headers.set('Authorization', `Bearer ${token}`);
+    }
+    return config;
+  },
+  (error) => {
+    // Do something with request error
+    return Promise.reject(error);
+  }
+);

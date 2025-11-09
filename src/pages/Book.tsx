@@ -6,9 +6,11 @@ import axios from "axios";
 import { useState, useEffect, useRef } from "react";
 import { useInfiniteQuery } from "@tanstack/react-query";
 import { BASE_API_URL } from "../api/main";
-import { getTokenFromCookies } from "../api/auth";
+import { axiosInstance, getTokenFromCookies } from "../api/auth";
 import "../styles/book.css";
 import HeaderBootstrap from "../components/HeaderBootstrap";
+
+
 
 const styles = {
   background: {
@@ -233,10 +235,9 @@ const Book: React.FC = () => {
       headers['Authorization'] = `Bearer ${token}`;
     }
 
-    const res = await axios.get(`${BASE_API_URL}/book/page/`, {
+    const res = await axiosInstance.get(`${BASE_API_URL}/book/page/`, {
       params: { page: pageParam },
       headers,
-      withCredentials: true,  // Add this
     });
 
     const responseData = res.data;
@@ -266,8 +267,8 @@ const Book: React.FC = () => {
       }
       return undefined;
     },
-    staleTime: Infinity,
-    gcTime: Infinity, // Keep cached data indefinitely
+    // staleTime: Infinity,
+    // gcTime: Infinity, 
   });
 
   // Flatten all pages from all fetched chunks
