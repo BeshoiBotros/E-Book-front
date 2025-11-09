@@ -235,9 +235,10 @@ const Book: React.FC = () => {
       headers['Authorization'] = `Bearer ${token}`;
     }
 
-    const res = await axiosInstance.get(`${BASE_API_URL}/book/page/`, {
+    const res = await axios.get(`${BASE_API_URL}/book/page/`, {
       params: { page: pageParam },
       headers,
+      // withCredentials: true
     });
 
     const responseData = res.data;
@@ -267,8 +268,8 @@ const Book: React.FC = () => {
       }
       return undefined;
     },
-    // staleTime: Infinity,
-    // gcTime: Infinity, 
+    staleTime: Infinity,
+    gcTime: Infinity, 
   });
 
   // Flatten all pages from all fetched chunks
