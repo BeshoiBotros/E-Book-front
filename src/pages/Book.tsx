@@ -6,7 +6,7 @@ import axios from "axios";
 import { useState, useEffect, useRef } from "react";
 import { useInfiniteQuery } from "@tanstack/react-query";
 import { BASE_API_URL } from "../api/main";
-import { axiosInstance, getTokenFromCookies } from "../api/auth";
+import { getTokenFromCookies } from "../api/auth";
 import "../styles/book.css";
 import HeaderBootstrap from "../components/HeaderBootstrap";
 

@@ -38,6 +38,7 @@ const Login: React.FC = () => {
       });
 
       navigate("/dashboard");
+      window.location.reload();
     },
     onError: (error) => {
       Swal.fire({

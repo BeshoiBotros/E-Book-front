@@ -24,7 +24,8 @@ const HeaderBootstrap = () => {
   }, []);
   const handleLogout = () => {
     Cookies.remove('access');
-    Cookies.remove('role')
+    Cookies.remove('role');
+    window.location.reload();
   }
   const navItems = [
     { label: "الرئيسية", href: "/" },

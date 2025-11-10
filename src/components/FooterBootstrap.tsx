@@ -49,9 +49,9 @@ const FooterBootstrap = () => {
             
             {/* Contact Info */}
             <div className="d-flex flex-column gap-3">
-              <a href="tel:00201112019430" className="text-decoration-none text-muted-custom d-flex align-items-center gap-3" style={{ transition: 'color 0.3s' }} onMouseEnter={(e) => e.currentTarget.style.color = 'var(--primary-color)'} onMouseLeave={(e) => e.currentTarget.style.color = 'var(--muted-foreground)'}>
+              <a href="tel:+201112019430" className="text-decoration-none text-muted-custom d-flex align-items-center gap-3" style={{ transition: 'color 0.3s' }} onMouseEnter={(e) => e.currentTarget.style.color = 'var(--primary-color)'} onMouseLeave={(e) => e.currentTarget.style.color = 'var(--muted-foreground)'}>
                 <Phone size={18} />
-                <span>00201112019430</span>
+                <span>+201112019430</span>
               </a>
               <a href="mailto:drkhairy4@gmail.com" className="text-decoration-none text-muted-custom d-flex align-items-center gap-3" style={{ transition: 'color 0.3s' }} onMouseEnter={(e) => e.currentTarget.style.color = 'var(--primary-color)'} onMouseLeave={(e) => e.currentTarget.style.color = 'var(--muted-foreground)'}>
                 <Mail size={18} />

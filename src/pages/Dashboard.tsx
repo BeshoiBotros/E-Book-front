@@ -188,7 +188,7 @@ const Dashboard: React.FC = () => {
       <HeaderBootstrap />
 
       <main className="" style={{ marginTop: "50px" }}>
-        <Container fluid className="">
+        <Container fluid className="pt-5">
           <StatisticsCards users={users} />
           <UsersTable
             users={users}

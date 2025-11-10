@@ -10,28 +10,28 @@ import Index from "./pages/Index";
 import './styles/custom.css';
 
 function App() {
-  // // This is easily bypassed
-  // document.addEventListener("contextmenu", (e) => e.preventDefault());
+  // This is easily bypassed
+  document.addEventListener("contextmenu", (e) => e.preventDefault());
 
-  // document.addEventListener("keydown", (e) => {
-  //   // F12
-  //   if (e.key === "F12") {
-  //     e.preventDefault();
-  //     return false;
-  //   }
+  document.addEventListener("keydown", (e) => {
+    // F12
+    if (e.key === "F12") {
+      e.preventDefault();
+      return false;
+    }
 
-  //   // Ctrl+Shift+I / Ctrl+Shift+C / Ctrl+Shift+J
-  //   if (
-  //     (e.ctrlKey &&
-  //       e.shiftKey &&
-  //       (e.key === "I" || e.key === "C" || e.key === "J")) ||
-  //     // Ctrl+U (view source)
-  //     (e.ctrlKey && e.key === "U")
-  //   ) {
-  //     e.preventDefault();
-  //     return false;
-  //   }
-  // });
+    // Ctrl+Shift+I / Ctrl+Shift+C / Ctrl+Shift+J
+    if (
+      (e.ctrlKey &&
+        e.shiftKey &&
+        (e.key === "I" || e.key === "C" || e.key === "J")) ||
+      // Ctrl+U (view source)
+      (e.ctrlKey && e.key === "U")
+    ) {
+      e.preventDefault();
+      return false;
+    }
+  });
 
   return (
     <>
